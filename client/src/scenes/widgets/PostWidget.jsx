@@ -71,7 +71,7 @@ const PostWidget = ({
     
   
     return (
-        <WidgetWrapper m="2rem 0">
+        <WidgetWrapper m="2rem 0" width="650px">
             <Friend
                 friendId={postUserId}
                 name={name}
@@ -154,6 +154,10 @@ const PostWidget = ({
                         id="commentToAdd"
                         sx={{
                             width: "93%",
+                            
+                            // m : "0",
+                            // width: "100px",
+                            // resize: "none",
                             backgroundColor: palette.neutral.light,
                             borderRadius: "2rem",
                             padding: "0.5rem 1rem",

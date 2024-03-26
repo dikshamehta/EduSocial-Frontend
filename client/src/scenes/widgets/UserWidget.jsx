@@ -44,6 +44,8 @@ const UserWidget = ({ userId, picturePath }) => {
         firstName,
         lastName,
         friends,
+        emailPrivacy,
+        email
     } = user;
 
     return (
@@ -71,6 +73,7 @@ const UserWidget = ({ userId, picturePath }) => {
                             {firstName} {lastName}
                         </Typography>
                         <Typography color={medium}>{username}</Typography>
+                        {emailPrivacy === true ? null : <Typography color={medium}>{email}</Typography>}
                         <Typography color={medium}>{friends.length} friends</Typography>
                     </Box>
                 </FlexBetween>

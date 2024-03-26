@@ -310,7 +310,7 @@ const Form = () => {
               </Button>
               <Button
                 fullWidth
-                type="submit"
+                // type="submit"
                 sx={{
                   m: "2rem 0",
                   p: "1rem",
@@ -320,7 +320,7 @@ const Form = () => {
                 }}
                 onClick={handleClick}
               >
-                {isLogin ? "LOGIN / Sign in with GOOGLE" : "REGISTER"}
+                {isLogin ? "LOGIN / Sign in with GOOGLE" : "REGISTER with GOOGLE"}
               </Button>
               <Typography
                 onClick={() => {

@@ -8,6 +8,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from "./theme";
 import AdPage from 'scenes/ADmanagement';
+import SettingsPage from 'scenes/settingsPage';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/home" element={ isAuth ? <HomePage /> : <Navigate to="/"/>} /> {/* If user is not logged in, redirect to login page */}
           <Route path="/profile/:userId" element={ isAuth ? <ProfilePage /> : <Navigate to="/"/>} /> {/* Home and Profile are protected */}
           <Route path="/create-ad" element={isAuth ? <AdPage /> : <Navigate to="/"/>}/>
+          <Route path="/settings" element={isAuth ? <SettingsPage /> : <Navigate to="/"/>}/>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>

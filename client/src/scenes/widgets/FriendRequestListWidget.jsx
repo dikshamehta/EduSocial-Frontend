@@ -1,27 +1,28 @@
 import { Box, Typography, useTheme } from '@mui/material';
-import Friend from 'components/Friend';
+// import Friend from 'components/Friend';
+import FriendRequest from 'components/FriendRequest';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFriends } from 'state';
+import { setFriendRequests } from 'state';
 
-const FriendListWidget = ({ userId }) => {
+const FriendRequestListWidget = ({ userId }) => {
     const dispatch = useDispatch();
     const { palette } = useTheme();
     const token = useSelector((state) => state.token);
-    const friends = useSelector((state) => state.user.friends);
+    const friendRequests = useSelector((state) => state.user.friendRequests);
 
-    const getFriends = async () => {
-        const response = await fetch(`http://localhost:5000/user/${userId}/friends`, {
+    const getFriendRequests = async () => {
+        const response = await fetch(`http://localhost:5000/user/${userId}/friendRequests`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
-        dispatch(setFriends({ friends: data }));
+        dispatch(setFriendRequests({ friendRequests: data }));
     };
 
     useEffect(() => {
-        getFriends();
+        getFriendRequests();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
@@ -32,21 +33,22 @@ const FriendListWidget = ({ userId }) => {
                 fontWeight="500"
                 sx={{ mb: "1.5rem" }}
             >
-                Friend List
+                Friend Requests
             </Typography>
             <Box display="flex" flexDirection="column" gap="1.5rem">
-                {friends.map((friend) => (
-                    <Friend
-                        key={friend._id}
-                        friendId={friend._id}
-                        name={`${friend.firstName} ${friend.lastName}`}
-                        // subtitle={friend.occupation}
-                        userPicturePath={friend.picturePath}
+                {friendRequests.map((friendRequest) => (
+                    <FriendRequest
+                        key={friendRequest._id}
+                        friendId={friendRequest._id}
+                        name={`${friendRequest.firstName} ${friendRequest.lastName}`}
+                        subtitle={friendRequest.occupation}
+                        userPicturePath={friendRequest.picturePath}
                     />
                 ))}
             </Box>
         </WidgetWrapper>
     );
+
 };
 
-export default FriendListWidget;
+export default FriendRequestListWidget;

@@ -109,7 +109,11 @@ const NavBar = () => {
                     <Typography>{fullName}</Typography>
                   </MenuItem>
                   <MenuItem>
+                    <Typography
+                      onClick={() => navigate("/settings")}
+                    >
                       Settings
+                    </Typography>
                   </MenuItem>
                   <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
                 </Select>
@@ -186,7 +190,11 @@ const NavBar = () => {
                       <Typography>{fullName}</Typography>
                     </MenuItem>
                     <MenuItem>
-                      Settings
+                      <Typography
+                        onClick={() => navigate("/settings")}
+                      >
+                        Settings
+                      </Typography>
                     </MenuItem>
                     <MenuItem onClick={() => dispatch(setLogout())}>
                       Log Out

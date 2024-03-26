@@ -2,7 +2,7 @@ import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setFriends } from "state";
+import { setFriends, setFriendRequests } from "state";
 import FlexBetween from "components/FlexBetween";
 import UserImage from "./UserImage";
 
@@ -43,7 +43,17 @@ const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
             }
           );
           const data = await response.json();
-          dispatch(setFriends({ friends: data }));
+          //Data contains the updated friends array and friendRequests array
+          const friends = data.friends;
+          const friendRequests = data.friendRequests;
+
+          console.log(data);
+          console.log(friends);
+          console.log(friendRequests);
+
+          dispatch(setFriends({ friends: friends }));
+          dispatch(setFriendRequests({ friendRequests: friendRequests }));   
+
     };
 
     return (
@@ -74,7 +84,19 @@ const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
                     {/* </Typography> */}
                 </Box>
             </FlexBetween>
-            <IconButton
+            {_id !== friendId && ( //User cannot add/remove themselves as a friend
+                <IconButton
+                    onClick={() => patchFriend()}
+                    sx={{ backgroundColor: "#B9F0B8", p: "0.6rem", opacity: "0.8" }}
+                >
+                    {isFriend ? ( //If the user is a friend, show remove friend icon, else show add friend icon
+                        <PersonRemoveOutlined sx={{ color: primaryDark }} />
+                    ) : (
+                        <PersonAddOutlined sx={{ color: primaryDark }} />
+                    )}
+                </IconButton>
+            )}
+            {/* <IconButton
                 onClick={() => patchFriend()}
                 sx={{ backgroundColor: "#B9F0B8", p: "0.6rem", opacity: "0.8" }}
             >
@@ -83,7 +105,7 @@ const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
                 ) : (
                     <PersonAddOutlined sx={{ color: primaryDark }} />
                 )}
-            </IconButton>
+            </IconButton> */}
         </FlexBetween>
     );
 };

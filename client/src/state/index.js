@@ -30,6 +30,14 @@ export const authSlice = createSlice({
                 console.log("User friends not found");
             }
         },
+        setFriendRequests: (state, action) => {
+            if (state.user) {
+                state.user.friendRequests = action.payload.friendRequests;
+            }
+            else {
+                console.log("User friend requests not found");
+            }
+        },
         setPosts: (state, action) => {
             state.posts = action.payload.posts;
         },
@@ -46,5 +54,5 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests } = authSlice.actions;
 export default authSlice.reducer;
