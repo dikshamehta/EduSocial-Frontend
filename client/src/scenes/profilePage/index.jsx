@@ -7,6 +7,8 @@ import FriendListWidget from 'scenes/widgets/FriendListWidget';
 import MyPostWidget from 'scenes/widgets/MyPostWidget';
 import PostsWidget from 'scenes/widgets/PostsWidget';
 import UserWidget from 'scenes/widgets/UserWidget';
+import Friend from 'components/Friend';
+import WidgetWrapper from 'components/WidgetWrapper';
 
 
 const ProfilePage = () => {
@@ -34,6 +36,9 @@ const ProfilePage = () => {
     let profilePrivacy = user.profilePrivacy;
     // let friendIds = user.friends.map(friend => friend._id);
     let friends = user.friends;
+    let picturePath = user.picturePath;
+    let firstName = user.firstName;
+    let lastName = user.lastName;
 
     return (
         <Box>
@@ -45,12 +50,22 @@ const ProfilePage = () => {
                 gap="2rem"
                 justifyContent="center"
             > 
-                {profilePrivacy === true && !friends.includes(loggedInUserId) ? 
+                {profilePrivacy === true && !friends.includes(loggedInUserId) && userId !== loggedInUserId 
+                 ? 
                     <>
-                        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-                            <UserWidget userId={userId} picturePath={user.picturePath} />
-                            <Box m="2rem 0" />
-                        </Box>
+                        <WidgetWrapper>
+                            <Box flexBasis={isNonMobileScreens ? "26%" : undefined} width="400px" flexDiretion="column" gap="1.5rem" mt="1rem">
+                                {/* <UserWidget userId={userId} picturePath={user.picturePath} /> */}
+                                <Friend
+                                    key={userId}
+                                    friendId={userId}
+                                    name={`${firstName} ${lastName}`}
+                                    // subtitle={friend.occupation}
+                                    userPicturePath={picturePath}
+                                />
+                                <Box m="2rem 0" />
+                            </Box>
+                        </WidgetWrapper>
                         <Typography
                             variant="h5"
                             fontWeight="500"

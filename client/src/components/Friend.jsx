@@ -47,9 +47,9 @@ const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
           const friends = data.friends;
           const friendRequests = data.friendRequests;
 
-          console.log(data);
-          console.log(friends);
-          console.log(friendRequests);
+        //   console.log(data);
+        //   console.log(friends);
+        //   console.log(friendRequests);
 
           dispatch(setFriends({ friends: friends }));
           dispatch(setFriendRequests({ friendRequests: friendRequests }));   

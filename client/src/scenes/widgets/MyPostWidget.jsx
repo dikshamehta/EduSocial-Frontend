@@ -18,6 +18,80 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import Form from "./PollForm";
 import { type } from "@testing-library/user-event/dist/type";
+// import PostTagTabs from "components/PostTagTabs";
+import React from "react";
+import styled from "styled-components";
+
+
+const theme = {
+    blue: {
+      default: "#3f51b5",
+      hover: "#283593",
+    },
+    pink: {
+      default: "#e91e63",
+      hover: "#ad1457",
+    },
+};
+
+const Tab = styled.button`
+  padding: 10px 30px;
+  cursor: pointer;
+  opacity: 0.6;
+  background: white;
+  border: 0;
+  outline: 0;
+  border-bottom: 2px solid transparent;
+  transition: ease border-bottom 250ms;
+  ${({ active }) =>
+    active &&
+    `
+    border-bottom: 2px solid black;
+    opacity: 1;
+  `}
+`;
+
+// Button.defaultProps = {
+//     theme: "blue",
+// };
+
+function TabGroup() {
+    const [active, setActive] = useState(types[0]);
+    const [ displayTag, setDisplayTag ] = useState(""); //Represent the switch whether someone has clicked tag button
+    return (
+      <>
+        <div>
+          {types.map((type) => (
+            <Tab
+              key={type}
+              active={active === type}
+              onClick={() => {
+                setActive(type);
+                setDisplayTag(String (type));
+            }}
+            >
+              {type}
+            </Tab>
+          ))}
+        </div>
+        <p />
+      </>
+    );
+}
+
+
+const types = ["Business", "Technology", "Humor", "John Cena"];
+
+function PostTagTabs() {
+    return (
+        <div
+
+        >
+            <TabGroup />
+        </div>
+    ); 
+}
+
 
 const MyPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
@@ -37,11 +111,16 @@ const MyPostWidget = ({ picturePath }) => {
     const [ isPoll, setIsPoll ] = useState(false); //Represent the switch whether someone has clicked poll button
     const [ poll, setPoll ] = useState(null); //Represent the poll that is uploaded
 
+    const [ displayTag, setDisplayTag ] = useState(""); //Represent the switch whether someone has clicked tag button
+    const [ active , setActive ] = useState(null); //Represent the tag that is clicked
+
     //Function that handles the post and makes the API call
     const handlePost = async () => {
         const formData = new FormData();
+        console.log(displayTag);
         formData.append("userId", _id);
         formData.append("description", post);
+        formData.append("displayTag", displayTag); //Add tag to the post (if it is given)
         if (image) {
             formData.append("file", image); //Uploads image if it is given
             formData.append("picturePath", image.name);
@@ -87,6 +166,8 @@ const MyPostWidget = ({ picturePath }) => {
         setPoll(null);
         setIsPoll(false);
         setPost("");
+        setDisplayTag("");
+        setActive(null);
     };
 
     const handleGetPollData = (pollData) => {
@@ -301,6 +382,52 @@ const MyPostWidget = ({ picturePath }) => {
                     Post
                 </Button>
             </FlexBetween>
+            <Divider sx={{ margin: "1.25rem 0" }} />
+            <FlexBetween
+            >
+                <Typography 
+                    color={mediumMain}
+                    // display="flex"
+                    // gap="0.5rem"
+                    // mt="1rem"
+                    
+                    
+                >
+                    Want to add a tag? Choose an option:
+                </Typography>
+                
+
+                
+
+            </FlexBetween>
+            <Divider sx={{ margin: "0.5rem 0" ,border:"none" }} />
+
+            <FlexBetween 
+                alignContent={"center"}
+                justifyContent={"center"}
+                ml="4.3rem"
+            >
+                <>
+                    <div>
+                        {types.map((type) => (
+                            <Tab
+                                key={type}
+                                active={active === type}
+                                onClick={() => {
+                                    setActive(type);
+                                    setDisplayTag(String (type));
+                                }}
+                                >
+                                {type}
+                            </Tab>
+                        ))}
+                    </div>
+                    <p />
+                </>
+
+            </FlexBetween>
+
+            
         </WidgetWrapper>
     );
 };

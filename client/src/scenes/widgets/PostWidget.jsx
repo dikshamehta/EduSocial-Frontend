@@ -69,6 +69,7 @@ const PostWidget = ({
         dispatch(setPost({ post: updatedPost }));
     };
     
+    const types = ["Cash", "Credit Card", "Bitcoin"];
   
     return (
         <WidgetWrapper m="2rem 0" width="650px">
