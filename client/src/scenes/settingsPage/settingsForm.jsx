@@ -34,6 +34,7 @@ import { useSelector } from 'react-redux';
 const initialValuesRegister = {
     profilePrivacy: false,
     emailPrivacy: false,
+    recentPostOrder: false,
 };
  
 const style = {
@@ -92,6 +93,7 @@ const SettingsForm = () => {
     let { //Destructuring user object
         profilePrivacy,
         emailPrivacy,
+        recentPostOrder,
     } = user;
  
     let isProfilePrivacy = false;
@@ -112,11 +114,13 @@ const SettingsForm = () => {
 
         console.log("Profile Privacy: " + profilePrivacy);
         console.log("Email Privacy: " + emailPrivacy);
+        console.log("Recent Post Order: " + recentPostOrder);
 
         //Create JSON format for the data
         const data = {
             profilePrivacy: profilePrivacy,
             emailPrivacy: emailPrivacy,
+            recentPostOrder: recentPostOrder,
         };
 
 
@@ -144,7 +148,12 @@ const SettingsForm = () => {
         if (savedUserData) {
             handleOpen();
             onSubmitProps.resetForm();
-            // dispatch(setUser(savedUserData));
+            dispatch(setUser({ user: savedUserData }));
+        
+
+            //Rerender the home page
+
+
         }
 
 
@@ -155,6 +164,9 @@ const SettingsForm = () => {
     };
     const changeEmailPrivacy = async () => {
         emailPrivacy = !emailPrivacy;
+    };
+    const changeRecentPostOrder = async () => {
+        recentPostOrder = !recentPostOrder;
     };
 
  
@@ -193,23 +205,78 @@ const SettingsForm = () => {
                     >
                         {isRegister && (
                             <>
-                                
-                                <Typography fontSize="14px" fontWeight="bold" position="relative">Profile Privacy</Typography>
-                                <Box display="flex" mt="2rem" ml="-14.5rem" position="relative">
-                                    <Typography mt="0.55rem">Public</Typography>
-                                    <Switch 
-                                        defaultChecked={profilePrivacy}
-                                        value={profilePrivacy}
-                                        onChange={handleChange}
-                                        id="profilePrivacy"
-                                        onClick={changeProfilePrivacy}
-                                    />
-                                    <Typography mt="0.55rem">Private</Typography>
+                                <Typography font-style="italic" fontWeight="500" variant="h5" sx={{ mb: "-1rem"}}>
+                                    Privacy Settings
+                                </Typography>
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    justifyContent="center"
+                                    alignItems="left"
+                                    gridColumn="span 4"
+                                >
+                                    <Typography fontSize="14px" fontWeight="bold" position="relative">Profile Privacy</Typography>
+                                    <Box display="flex" mt="0.5rem" position="relative">
+                                        <Typography mt="0.55rem">Public</Typography>
+                                        <Switch 
+                                            defaultChecked={profilePrivacy}
+                                            value={profilePrivacy}
+                                            onChange={handleChange}
+                                            id="profilePrivacy"
+                                            onClick={changeProfilePrivacy}
+                                        />
+                                        <Typography mt="0.55rem">Private</Typography>
+                                    </Box>
                                 </Box>
 
-                                
-                                <Typography fontSize="14px" fontWeight="bold" position="sticky" mt="8rem" ml="-28.8rem">Email Privacy</Typography>
-                                <Box display="flex" mt="10rem" ml="-43.3rem" position="sticky">
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    justifyContent="center"
+                                    alignItems="left"
+                                    gridColumn="span 4"
+                                    
+                                >
+                                    <Typography fontSize="14px" fontWeight="bold" position="relative" mt="-1rem">Email Privacy</Typography>
+                                    <Box display="flex" mt="0.5rem" position="relative">
+                                        <Typography mt="0.55rem">Public</Typography>
+                                        <Switch 
+                                            defaultChecked={emailPrivacy}
+                                            id="emailPrivacy"
+                                            value={emailPrivacy}
+                                            onChange={handleChange}
+                                            onClick={changeEmailPrivacy}
+                                        />
+                                        <Typography mt="0.55rem">Private</Typography>
+                                    </Box>
+                                </Box>
+
+
+                                <Typography font-style="italic" fontWeight="500" variant="h5" sx={{ mb: "-1rem"}}>
+                                    Content Settings
+                                </Typography>
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    justifyContent="center"
+                                    alignItems="left"
+                                    gridColumn="span 4"
+                                >
+                                    <Typography fontSize="14px" fontWeight="bold" position="relative">Feed Order</Typography>
+                                    <Box display="flex" mt="0.5rem" position="relative">
+                                        <Typography mt="0.55rem">Recent</Typography>
+                                        <Switch 
+                                            defaultChecked={recentPostOrder}
+                                            value={recentPostOrder}
+                                            onChange={handleChange}
+                                            id="recentPostOrder"
+                                            onClick={changeRecentPostOrder}
+                                        />
+                                        <Typography mt="0.55rem">Algorithm</Typography>
+                                    </Box>
+                                </Box>
+                                {/* <Typography fontSize="14px" fontWeight="bold" position="relative" mt="8rem">Email Privacy</Typography>
+                                <Box display="flex" mt="10rem" position="relative">
                                     <Typography mt="0.55rem">Public</Typography>
                                     <Switch 
                                         defaultChecked={emailPrivacy}
@@ -219,7 +286,7 @@ const SettingsForm = () => {
                                         onClick={changeEmailPrivacy}
                                     />
                                     <Typography mt="0.55rem">Private</Typography>
-                                </Box>
+                                </Box> */}
                                 
                                
                                 
@@ -265,7 +332,12 @@ const SettingsForm = () => {
                                         color: palette.background.alt,
                                         "&:hover": { color: palette.primary.main },
                                     }}
-                                    onClick={navigateToHomePage}                                  
+                                    onClick={ () => {
+                                        handleClose();
+                                        // this.forceUpdate();
+                                        navigateToHomePage();
+
+                                    }}                                  
                                     >
                                     {"Home Page"}
                                     </Button>

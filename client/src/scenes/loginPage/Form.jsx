@@ -18,6 +18,8 @@ import Dropzone from 'react-dropzone';
 import FlexBetween from 'components/FlexBetween';
 import { auth, provider } from "./config";
 import { signInWithPopup } from "firebase/auth";
+import styled from "styled-components";
+
 
 const registerSchema = yup.object().shape({ //Registration validation schema
     username: yup.string().required("Username is required"),
@@ -40,12 +42,55 @@ const initialValuesRegister = {
     email: "",
     password: "",
     picture: "",
+    displayTag: "",
 };
 
 const initialValuesLogin = {
     email: "",
     password: "",
 };
+
+
+//Display tag implementation
+const theme = {
+  blue: {
+    default: "#3f51b5",
+    hover: "#283593",
+  },
+  pink: {
+    default: "#e91e63",
+    hover: "#ad1457",
+  },
+};
+
+const Tab = styled.button`
+padding: 10px 30px;
+cursor: pointer;
+opacity: 0.6;
+background: white;
+border: 0;
+outline: 0;
+border-bottom: 2px solid transparent;
+transition: ease border-bottom 250ms;
+${({ active }) =>
+  active &&
+  `
+  border-bottom: 2px solid black;
+  opacity: 1;
+`}
+`;
+
+//Use pereventDefault for Tab
+// Tab.defaultProps = {
+//   onClick: (e) => e.preventDefault(),
+// };
+
+
+const types = ["Default", "Business", "Technology", "Humor", "John Cena"];
+
+
+
+
 
 const Form = () => {
     const [pageType, setPageType] = useState("login"); //Default page type is login - display different form based on state
@@ -55,6 +100,10 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width: 600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+    const mediumMain = palette.neutral.mediumMain;
+
+    const [ displayTag, setDisplayTag ] = useState(""); //Represent the switch whether someone has clicked tag button
+    const [ active , setActive ] = useState(null); //Represent the tag that is clicked
 
     // Oauth
         const [value, setValue] = useState("");
@@ -129,9 +178,17 @@ const Form = () => {
     const register = async (values, onSubmitProps) => { //Allows us to use form data to register
         const formData = new FormData(); //Allows us to use image with form info.
         for (let value in values) { //Loops through values and appends
+            console.log("VALUE", value);
             formData.append(value, values[value]);
         }
+        console.log("PICTURE", values.picture.name)
+        console.log("DISPLAY TAG", displayTag)
+
+        
         formData.append("picturePath", values.picture.name);
+        formData.append("displayTag", displayTag); //Appends display tag to form data
+
+        console.log("FORM DATA", formData);
 
         const savedUserResponse = await fetch( //Sending form data to this API call
             "http://localhost:5000/auth/register",
@@ -142,6 +199,8 @@ const Form = () => {
         );
         const savedUser = await savedUserResponse.json(); //Converts response to JSON
         onSubmitProps.resetForm(); //Resets form
+        setActive(null); //Resets active tag
+        setDisplayTag(""); //Resets display tag
 
         if (savedUser) {
             setPageType("login"); //Redirects to login page
@@ -267,7 +326,9 @@ const Form = () => {
                       )}
                     </Dropzone>
                   </Box>
+                
                 </>
+                
               )}
 
               <TextField
@@ -291,6 +352,52 @@ const Form = () => {
                 helperText={touched.password && errors.password}
                 sx={{ gridColumn: "span 4" }}
               />
+
+              {/* Display tag */}
+              {isRegister && (
+                <>
+                  <FlexBetween
+                    sx={{ gridColumn: "span 4" }}
+                    gap="1rem"
+                  >
+                    <Typography
+                      color={mediumMain}
+                    >Choose an option to customize your feed:</Typography>
+                  </FlexBetween>
+                  <FlexBetween 
+                      alignContent={"center"}
+                      justifyContent={"center"}
+                      ml="10rem"
+                      mt="-1rem"
+                      sx={{ gridColumn: "span 4" }}
+                  >
+                      <>
+                          <div>
+                              {types.map((type) => (
+                                  <Tab
+                                      key={type}
+                                      active={active === type}
+                                      onClick={(e) => {
+                                          e.preventDefault();
+                                          setActive(type);
+                                          setDisplayTag(String (type));
+                                        
+
+                                      }}
+                                      onChange = {handleChange}
+                                      onBlur = {handleBlur}
+                                      >
+                                      
+                                      {type}
+                                  </Tab>
+                              ))}
+                          </div>
+                          <p />
+                      </>
+
+                  </FlexBetween>
+                </>
+              )}
             </Box>
 
             {/* Buttons */}

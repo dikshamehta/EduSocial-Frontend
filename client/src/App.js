@@ -9,6 +9,7 @@ import { createTheme } from '@mui/material/styles';
 import { themeSettings } from "./theme";
 import AdPage from 'scenes/ADmanagement';
 import SettingsPage from 'scenes/settingsPage';
+import SinglePostPage from 'scenes/singlePostPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/profile/:userId" element={ isAuth ? <ProfilePage /> : <Navigate to="/"/>} /> {/* Home and Profile are protected */}
           <Route path="/create-ad" element={isAuth ? <AdPage /> : <Navigate to="/"/>}/>
           <Route path="/settings" element={isAuth ? <SettingsPage /> : <Navigate to="/"/>}/>
+          <Route path="/post/:userId/:postId" element={isAuth ? <SinglePostPage/> : <Navigate to="/"/>}/>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>

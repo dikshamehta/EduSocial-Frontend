@@ -51,46 +51,7 @@ const Tab = styled.button`
   `}
 `;
 
-// Button.defaultProps = {
-//     theme: "blue",
-// };
-
-function TabGroup() {
-    const [active, setActive] = useState(types[0]);
-    const [ displayTag, setDisplayTag ] = useState(""); //Represent the switch whether someone has clicked tag button
-    return (
-      <>
-        <div>
-          {types.map((type) => (
-            <Tab
-              key={type}
-              active={active === type}
-              onClick={() => {
-                setActive(type);
-                setDisplayTag(String (type));
-            }}
-            >
-              {type}
-            </Tab>
-          ))}
-        </div>
-        <p />
-      </>
-    );
-}
-
-
 const types = ["Business", "Technology", "Humor", "John Cena"];
-
-function PostTagTabs() {
-    return (
-        <div
-
-        >
-            <TabGroup />
-        </div>
-    ); 
-}
 
 
 const MyPostWidget = ({ picturePath }) => {

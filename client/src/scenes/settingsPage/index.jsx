@@ -45,8 +45,8 @@ const SettingsPage = () => {
                     Welcome to EduSocial, the Social Media Made for Education.
                    
                 </Typography> */}
-                <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem"}}>
-                    Privacy Settings
+                <Typography fontWeight="700" variant="h4" sx={{ mb: "1.5rem"}}>
+                    Settings
                 </Typography>
                 <SettingsForm />
             </Box>

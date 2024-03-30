@@ -34,7 +34,25 @@ const PostWidget = ({
     const loggedInUserId = useSelector((state) => state.user._id);
     const loggedInUserUsername = useSelector((state) => state.user.username);
     const loggedInUserPicturePath = useSelector((state) => state.user.picturePath);
-    const isLiked = Boolean(likes[loggedInUserId]); //Checks if the user has liked the post
+
+    let isLiked = false;
+    console.log("loggedInUserId", loggedInUserId);
+    console.log("likes", likes);
+    if (loggedInUserId in likes) {
+        isLiked = true;
+    }
+    else {
+        isLiked = false;
+
+    }
+    // const isLiked = Boolean(likes[loggedInUserId]); //Checks if the user has liked the post
+    // const isLiked = likes.includes(loggedInUserId); //Checks if the user has liked the post
+    // const isLiked = likes.some((like) => like.userId === loggedInUserId); //Checks if the user has liked the post
+    
+    //Check if user has liked the post, handling defined and undefined
+
+
+
     const likeCount = Object.keys(likes).length; //Counts the number of likes
     console.log(likeCount);
   
