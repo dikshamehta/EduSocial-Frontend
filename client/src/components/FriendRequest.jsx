@@ -9,6 +9,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { setFriendRequests } from "state";
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 const FriendRequest = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -50,7 +52,7 @@ const FriendRequest = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
 
     // const patchFriend = async () => { //API call for adding/removing friend
     //     const response = await fetch(
-    //         `http://localhost:5000/user/${_id}/${friendId}`,
+    //         `http://localhost:${serverPort}/user/${_id}/${friendId}`,
     //         {
     //           method: "PATCH",
     //           headers: {
@@ -65,7 +67,7 @@ const FriendRequest = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
 
     const acceptRequest = async () => {
         const response = await fetch(
-            `http://localhost:5000/user/${_id}/${friendId}/accept`,
+            `http://localhost:${serverPort}/user/${_id}/${friendId}/accept`,
             {
               method: "PATCH",
               headers: {
@@ -88,7 +90,7 @@ const FriendRequest = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
 
     const declineRequest = async () => {
         const response = await fetch(
-            `http://localhost:5000/user/${_id}/${friendId}/decline`,
+            `http://localhost:${serverPort}/user/${_id}/${friendId}/decline`,
             {
               method: "PATCH",
               headers: {

@@ -53,7 +53,7 @@ const Tab = styled.button`
 
 const types = ["Business", "Technology", "Humor", "John Cena"];
 
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const MyPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
     const [ isImage, setIsImage ] = useState(false); //Represent the switch whether someone has clicked image button
@@ -113,7 +113,7 @@ const MyPostWidget = ({ picturePath }) => {
             formData.append("pollData", JSON.stringify(pollData));
         }
 
-        const response = await fetch("http://localhost:5000/posts", {
+        const response = await fetch(`http://localhost:${serverPort}/posts`, {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
             body: formData,

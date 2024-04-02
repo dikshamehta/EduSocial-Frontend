@@ -20,15 +20,17 @@ import {
     Close
 } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMode, setLogout } from 'state';
+import { setMode, setLogout, setSearchResults } from 'state';
 import { useNavigate } from 'react-router-dom';
 import FlexBetween from 'components/FlexBetween';
 
 const NavBar = () => {
     const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false); //For small screens
+    const [query, setQuery] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme(); //Use any of the set themes
@@ -41,7 +43,34 @@ const NavBar = () => {
 
     const fullName = `${user.firstName} ${user.lastName}`; //Access to full name!
     // const fullName = `first last`; //Test
+    const serverPort = process.env.REACT_APP_SERVER_PORT;
 
+    const getSearchResults = async (query) => {
+        const response = await fetch(`http://localhost:${serverPort}/search/`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'search_string': `${query}`
+            })
+        });
+        let searchData = await response.json();
+        let searchResults = {
+            'posts': searchData.posts,
+            'people': searchData.users,
+            'pages': []
+        };
+        console.log(searchResults);
+        dispatch(setSearchResults(searchResults));
+    }
+
+    const handleSearch = () => {
+        let query = document.getElementById("searchBox").value;
+        getSearchResults(query, token);
+        navigate("/search");
+    }
 
     return (
         <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -67,9 +96,12 @@ const NavBar = () => {
                 gap="3rem"
                 padding="0.1rem 1.5rem"
               >
-                <InputBase placeholder="Search" />
-                <IconButton>
-                  <Search />
+                  <InputBase
+                      placeholder="Search"
+                      id="searchBox"
+                  />
+                  <IconButton onClick={handleSearch}>
+                      <Search />
                 </IconButton>
               </FlexBetween>
             )}

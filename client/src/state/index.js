@@ -5,6 +5,11 @@ const initialState = {
     user: null,
     token: null,
     posts: [],
+    searchResults: {
+        posts: [],
+        people: [],
+        pages: []
+    }
 };
 
 export const authSlice = createSlice({
@@ -50,9 +55,22 @@ export const authSlice = createSlice({
             });
             state.posts = updatedPosts;
         },
+        setSearchPost: (state, action) => {
+            console.log('search post update');
+            const updatedPosts = state.searchResults.posts.map((post) => {
+                if (post._id === action.payload.post._id) {
+                    return action.payload.post;
+                }
+                return post;
+            });
+            state.searchResults.posts = updatedPosts;
+        },
 
+        setSearchResults: (state, action) => {
+            state.searchResults = action.payload;
+        }
     },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests, setSearchPost, setSearchResults } = authSlice.actions;
 export default authSlice.reducer;

@@ -30,7 +30,9 @@ import { useSelector } from 'react-redux';
 //     email: yup.string().email("Invalid email").required("Email is required"),
 //     picture: yup.string().required("Ad picture is required"),
 // });
- 
+
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 const initialValuesRegister = {
     profilePrivacy: false,
     emailPrivacy: false,
@@ -76,7 +78,7 @@ const SettingsForm = () => {
     }
 
     const getUser = async () => {
-        const response = await fetch(`http://localhost:5000/user/${userId}`, { //API call
+        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, { //API call
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -129,7 +131,7 @@ const SettingsForm = () => {
         // console.log(JSON.stringify(data));
 
         const savedSettingsResponse = await fetch(
-            `http://localhost:5000/user/${_id}/changeSettings`,
+            `http://localhost:${serverPort}/user/${_id}/changeSettings`,
             {
                 method: "PUT",
                 body: JSON.stringify(data),

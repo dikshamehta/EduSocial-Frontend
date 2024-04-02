@@ -3,6 +3,9 @@ import FlexBetween from 'components/FlexBetween';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useNavigate } from 'react-router-dom/dist';
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const img_url = `http://localhost:${serverPort}/assets/patek-philippe-banner.png`;
+
 const AdvertWidget = () => {
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
@@ -33,7 +36,7 @@ const AdvertWidget = () => {
                 width="100%"
                 height="auto"
                 alt="advert"
-                src="http://localhost:5000/assets/patek-philippe-banner.png"
+                src={img_url}
                 style={{ borderRadius: "0.75rem", margin: "0.75rem 0" }}
             />
             <FlexBetween>

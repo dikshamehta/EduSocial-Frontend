@@ -20,6 +20,7 @@ import { auth, provider } from "./config";
 import { signInWithPopup } from "firebase/auth";
 import styled from "styled-components";
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 const registerSchema = yup.object().shape({ //Registration validation schema
     username: yup.string().required("Username is required"),
@@ -130,7 +131,7 @@ const Form = () => {
               // Now send the token to your backend for verification and processing at the updated endpoint
               console.log("Sending data to backend");
               const response = await fetch(
-                "http://localhost:5000/auth/google-login",
+                `http://localhost:${serverPort}/auth/google-login`,
                 {
                   method: "POST",
                   headers: {
@@ -191,7 +192,7 @@ const Form = () => {
         console.log("FORM DATA", formData);
 
         const savedUserResponse = await fetch( //Sending form data to this API call
-            "http://localhost:5000/auth/register",
+            `http://localhost:${serverPort}/auth/register`,
             {
                 method: "POST",
                 body: formData,
@@ -208,7 +209,7 @@ const Form = () => {
     };
 
     const login = async (values, onSubmitProps) => { //Allows us to use form data to login
-        const loggedInResponse = await fetch("http://localhost:5000/auth/login", {
+        const loggedInResponse = await fetch(`http://localhost:${serverPort}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(values), //Already formatted

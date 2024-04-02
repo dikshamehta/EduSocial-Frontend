@@ -16,6 +16,8 @@ import { TwitterShareButton, XIcon } from 'react-share';
 //import XIcon from '@mui/icons-material/X';
 import PollWidget from "./PollWidget";
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 const PostWidget = ({
     postId,
     postUserId,
@@ -27,6 +29,7 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
+    updatePost = setPost
 }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
@@ -61,7 +64,7 @@ const PostWidget = ({
     const primary = palette.primary.main;
   
     const patchLike = async () => {
-        const response = await fetch(`http://localhost:5000/posts/${postId}/like`, {
+        const response = await fetch(`http://localhost:${serverPort}/posts/${postId}/like`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -70,12 +73,12 @@ const PostWidget = ({
             body: JSON.stringify({ userId: loggedInUserId }), //Keeps track of whether user has liked the post
         });
         const updatedPost = await response.json();
-        dispatch(setPost({ post: updatedPost }));
+        dispatch(updatePost({ post: updatedPost }));
     };
 
     const handleComment = async () => {
         let comment = document.getElementById("commentToAdd").value;
-        const response = await fetch(`http://localhost:5000/posts/${postId}/comment`, {
+        const response = await fetch(`http://localhost:${serverPort}/posts/${postId}/comment`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -84,7 +87,7 @@ const PostWidget = ({
             body: JSON.stringify({ userId: loggedInUserId, userUsername: loggedInUserUsername,userPicturePath: loggedInUserPicturePath, comment: comment}),
         });
         const updatedPost = await response.json();
-        dispatch(setPost({ post: updatedPost }));
+        dispatch(updatePost({ post: updatedPost }));
     };
     
     const types = ["Cash", "Credit Card", "Bitcoin"];
@@ -106,7 +109,7 @@ const PostWidget = ({
                     height="auto"
                     alt="post"
                     style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-                    src={`http://localhost:5000/assets/${picturePath}`}
+                    src={`http://localhost:${serverPort}/assets/${picturePath}`}
                 />
             )}
             {videoPath && (
@@ -116,7 +119,7 @@ const PostWidget = ({
                     controls
                     style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
                 >
-                    <source src={`http://localhost:5000/assets/${videoPath}`} />
+                    <source src={`http://localhost:${serverPort}/assets/${videoPath}`} />
                 </video>
             )}
             {pollData && (

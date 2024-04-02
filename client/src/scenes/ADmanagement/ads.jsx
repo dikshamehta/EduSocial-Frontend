@@ -18,8 +18,8 @@ import Dropzone from 'react-dropzone';
 import FlexBetween from 'components/FlexBetween';
 import { create } from '@mui/material/styles/createTransitions';
 import { useSelector } from 'react-redux';
- 
- 
+
+const serverPort = process.env.REACT_APP_SERVER_PORT;
  
  
 const adSchema = yup.object().shape({ //Registration validation schema
@@ -90,7 +90,7 @@ const Adsform = () => {
 
         console.log(formData);
         const savedAdResponse = await fetch(
-            "http://localhost:5000/ads", 
+            `http://localhost:${serverPort}/ads`,
             {
                 method: "POST",
                 body: formData,
