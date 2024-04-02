@@ -92,7 +92,7 @@ const Form = ({ getFormData }) => {
                                 name="options"
                                 value={option}
                                 onChange={(e) => handleOptionChange(e, index)}
-                                error={Boolean(pollFormErrors.options)}
+                                error={Boolean(pollFormErrors.options && pollFormErrors.options[index])}
                                 helperText={pollFormErrors.options}
                             />
                             <IconButton onClick={() => handleRemoveOption(index)}>
@@ -103,9 +103,6 @@ const Form = ({ getFormData }) => {
                 </Box>
                 <Button variant="outlined" onClick={handleAddOption}>
                     Add Option
-                </Button>
-                <Button type="submit" disabled={isSubmitting}>
-                    Submit
                 </Button>
             </Box>
         </form>

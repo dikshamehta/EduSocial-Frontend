@@ -120,7 +120,7 @@ const PostWidget = ({
                 </video>
             )}
             {pollData && (
-                <PollWidget parentId={postId} />
+                <PollWidget thisPollData={pollData} parentId={postId} />
             )}
             <FlexBetween mt="0.25rem">
                 <FlexBetween gap="1rem">
