@@ -4,13 +4,13 @@ import WidgetWrapper from "components/WidgetWrapper";
 import Member from "components/Member";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const PageMembersWidget = ({ pageId }) => {
     const [members, setMembers] = useState([]);
     const { palette } = useTheme();
 
     const getMembers = async () => {
-        const response = await fetch(`http://localhost:5000/page/${pageId}/members`, {
+        const response = await fetch(`http://localhost:${serverPort}/page/${pageId}/members`, {
             method: "GET",
             //headers: { Authorization: `Bearer ${token}` },
         });

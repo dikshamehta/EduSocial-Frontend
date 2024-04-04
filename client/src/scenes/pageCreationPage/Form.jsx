@@ -17,6 +17,8 @@ import FlexBetween from 'components/FlexBetween';
 import { useSelector } from 'react-redux';
 import PageTypes from 'components/PageTypes';
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 const pageSchema = yup.object().shape({
   pageName: yup.string().required("Page name is required"),
   pageType: yup.string().required("Page type is required"),
@@ -46,7 +48,7 @@ const Form = () => {
     formData.append("pagePicturePath", values.pagePictureFile.name);
     formData.append("userId", _id);
     
-    const response = await fetch("http://localhost:5000/page/create", {
+    const response = await fetch(`http://localhost:${serverPort}/page/create`, {
       method: "POST",
       body: formData,
       // headers: {

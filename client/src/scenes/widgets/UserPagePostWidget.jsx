@@ -14,7 +14,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import PollForm from "scenes/widgets/PollForm";
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const UserPagePostWidget = ({ pageId, picturePath }) => {
     const [ isImage, setIsImage ] = useState(false); //Represent the switch whether somoene has clicked image button
     const [ image, setImage ] = useState(null); //Represent the image that is uploaded
@@ -67,7 +67,7 @@ const UserPagePostWidget = ({ pageId, picturePath }) => {
             formData.append("pollData", JSON.stringify(pollData));
         }
 
-        const response = await fetch(`http://localhost:5000/pagePost`, {
+        const response = await fetch(`http://localhost:${serverPort}/pagePost`, {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
             body: formData,
@@ -87,7 +87,7 @@ const UserPagePostWidget = ({ pageId, picturePath }) => {
     };
 
     const sendNotification = async (pageId) => {
-        const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+        const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         }).then((res) => res.json());
@@ -99,7 +99,7 @@ const UserPagePostWidget = ({ pageId, picturePath }) => {
                 link: `/page/${pageId}`,
             };
             if (member !== _id) {
-                await fetch(`http://localhost:5000/user/${member}`, {
+                await fetch(`http://localhost:${serverPort}/user/${member}`, {
                   method: "PATCH",
                   body: JSON.stringify(notification),
                   headers: {

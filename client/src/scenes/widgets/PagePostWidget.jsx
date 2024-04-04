@@ -115,7 +115,7 @@ const PagePostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={`http://localhost:5000/assets/${picturePath}`}
+          src={`http://localhost:${serverPort}/assets/${picturePath}`}
         />
       )}
       {videoPath && (

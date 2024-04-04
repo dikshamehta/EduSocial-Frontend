@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, List, ListItem, Typography, TextField, Divider } from '@mui/material';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useSelector } from "react-redux";
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const PageCalendarWidget = ({ pageId }) => {
     const [selectedDate, setSelectedDate] = useState('');
     const [eventName, setEventName] = useState('');
@@ -17,7 +17,7 @@ const PageCalendarWidget = ({ pageId }) => {
 
     const fetchEvents = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+            const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -62,7 +62,7 @@ const PageCalendarWidget = ({ pageId }) => {
               description: eventDescription,
             };
             try {
-                const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+                const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
                     method: "PATCH",
                     headers: {
                         Authorization: `Bearer ${token}`,

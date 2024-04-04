@@ -39,8 +39,6 @@ const PostWidget = ({
     const loggedInUserPicturePath = useSelector((state) => state.user.picturePath);
 
     let isLiked = false;
-    console.log("loggedInUserId", loggedInUserId);
-    console.log("likes", likes);
     if (loggedInUserId in likes) {
         isLiked = true;
     }
@@ -57,7 +55,6 @@ const PostWidget = ({
 
 
     const likeCount = Object.keys(likes).length; //Counts the number of likes
-    console.log(likeCount);
   
     const { palette } = useTheme();
     const main = palette.neutral.main;

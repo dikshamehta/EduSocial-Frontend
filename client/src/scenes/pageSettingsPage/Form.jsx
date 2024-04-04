@@ -23,6 +23,8 @@ import FlexBetween from 'components/FlexBetween';
 import { useState } from 'react';
 import { red } from '@mui/material/colors';
 
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 const pageSchema = yup.object().shape({
   pageName: yup.string().max(75, "Page name must be 75 characters or less"),
   pageType: yup.string(),
@@ -66,7 +68,7 @@ const Form = (paramPageId) => {
     }
     formData.append("pagePicturePath", values.pagePictureFile.name);
 
-    const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+    const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
         method: "POST",
         body: formData,
         headers: {
@@ -92,7 +94,7 @@ const Form = (paramPageId) => {
   const handleDeletePage = async (pageId) => {
     //Handles page deletion
     try {
-      const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+      const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

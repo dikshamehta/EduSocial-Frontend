@@ -4,7 +4,7 @@ import WidgetWrapper from 'components/WidgetWrapper';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const NotificationWindowWidget = ({ onClose, anchorEl }) => {
     const _id = useSelector((state) => state.user._id);
     const token = useSelector((state) => state.token);
@@ -15,7 +15,7 @@ const NotificationWindowWidget = ({ onClose, anchorEl }) => {
     const getNotifications = async () => {
         let data;
         try {
-          const response = await fetch(`http://localhost:5000/user/${_id}/notifications`, {
+          const response = await fetch(`http://localhost:${serverPort}/user/${_id}/notifications`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
           }).then((res) => res.json());

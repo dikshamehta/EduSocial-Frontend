@@ -9,7 +9,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import IconButton from "@mui/material/IconButton";
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { red } from "@mui/material/colors";
-
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 const PageSidebarWidget = ({ pageId, picturePath }) => {
   const [page, setPage] = useState(null);
   const { palette } = useTheme();
@@ -24,7 +24,7 @@ const PageSidebarWidget = ({ pageId, picturePath }) => {
 
   const getPage = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/page/${pageId}`, {
+      const response = await fetch(`http://localhost:${serverPort}/page/${pageId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -38,7 +38,7 @@ const PageSidebarWidget = ({ pageId, picturePath }) => {
   const leavePage = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/user/${userId}/leavePage/${pageId}`,
+        `http://localhost:${serverPort}/user/${userId}/leavePage/${pageId}`,
         {
           method: "POST",
           headers: {

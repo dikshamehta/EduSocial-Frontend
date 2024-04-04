@@ -4,6 +4,8 @@ import SearchResults from "../../components/SearchResults";
 import Filter from "../../components/SearchFilter";
 import NavBar from 'scenes/navbar';
 import UserWidget from "./UserWidget";
+import {useState} from "react";
+import SearchFilter from "../../components/SearchFilter";
 
 // const serverPort = process.env.REACT_APP_SERVER_PORT;
 
@@ -29,22 +31,14 @@ const SearchWidget = () => {
                 justifyContent="space-between"
             >
                 <Box flexBasis={isNonMobileScreens ? "15%" : undefined}>
-                    <Filter
-                        categories={["post", "people", "pages"]}
-                        selectedCategories = {["post", "people", "pages"]}
-                        onChange = {(event) => {console.log(event)}}
-                    />
+                    <SearchFilter/>
                 </Box>
 
                 <Box
                     flexBasis={isNonMobileScreens ? "85%" : undefined}
                     mt={isNonMobileScreens ? undefined : "2rem"}
                 >
-                    <SearchResults
-                        posts={searchResults.posts}
-                        people={searchResults.people}
-                        pages={searchResults.pages}
-                    />
+                    <SearchResults/>
                 </Box>
             </Box>
         </Box>
