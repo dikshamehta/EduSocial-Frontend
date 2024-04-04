@@ -16,7 +16,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
-import Form from "./PollForm";
+import PollForm from "./PollForm";
 import { type } from "@testing-library/user-event/dist/type";
 // import PostTagTabs from "components/PostTagTabs";
 import React from "react";
@@ -248,7 +248,7 @@ const MyPostWidget = ({ picturePath }) => {
                     mt="1rem"
                     p="1rem"
                 >
-                    <Form getFormData={handleGetPollData} />
+                    <PollForm getFormData={handleGetPollData} />
                 </Box>
             )}
 

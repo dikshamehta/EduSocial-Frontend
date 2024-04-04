@@ -11,6 +11,10 @@ import AdPage from 'scenes/ADmanagement';
 import SettingsPage from 'scenes/settingsPage';
 import SinglePostPage from 'scenes/singlePostPage';
 import SearchPage from "./scenes/SearchPage";
+import PageExplorePage from "./scenes/pageExplorePage";
+import PageCreationPage from "./scenes/pageCreationPage";
+import PagePage from "./scenes/pagePage";
+import PageSettingsPage from "./scenes/pageSettingsPage";
 
 
 function App() {
@@ -31,6 +35,10 @@ function App() {
           <Route path="/settings" element={isAuth ? <SettingsPage /> : <Navigate to="/"/>}/>
           <Route path="/post/:userId/:postId" element={isAuth ? <SinglePostPage/> : <Navigate to="/"/>}/>
           <Route path="/search" element={<SearchPage />} /> {/* Home and Profile are protected */}
+          <Route path="/page" element={ isAuth ? <PageExplorePage /> : <Navigate to="/"/>} />
+          <Route path="/page/create" element={ isAuth ? <PageCreationPage /> : <Navigate to="/"/>} />
+          <Route path="/page/:pageId" element={ isAuth ? <PagePage /> : <Navigate to="/"/>} />
+          <Route path="page/:pageId/settings" element={ isAuth ? <PageSettingsPage /> : <Navigate to="/"/>} />
         </Routes>
       </ThemeProvider>
       </BrowserRouter>

@@ -19,7 +19,7 @@ const PollWidget = ({ parentId }) => {
     };
 
     const handleSubmit = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/polls/${parentId}`, {
+        await fetch(`http://localhost:${serverPort}/polls/${parentId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,18 +38,19 @@ const PollWidget = ({ parentId }) => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
+            console.log(data);
             if (!data.options) {
-                throw new Error('ERROR: POLL DATA NOT FOUND');
+              throw new Error('ERROR: POLL DATA NOT FOUND');
             }
             if (data.voters.includes(userId)) {
-                setHasVoted(true);
+              setHasVoted(true);
             }
             setPollData(data);
         } catch (error) {
+            console.error('Error fetching poll data:', error);
+            setPollData({}); // Clear poll data if error occurs
           return (
-            <div>
               <Typography variant="h4">{error}</Typography>
-            </div>
           );
         }
     };
