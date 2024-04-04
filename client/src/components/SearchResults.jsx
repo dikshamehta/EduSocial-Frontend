@@ -72,44 +72,67 @@ const UserCard = ({ user }) => {
     );
 };
 
-const SearchResults = ({ posts, people, pages }) => {
-    return (
-        <Box>
-            {/* Render posts */}
+const SearchResults = () => {
+    const filterResults = useSelector((state)=>state.filterResults);
+    const type = filterResults.type;
+    const searchResults = useSelector((state) => state.searchResults);
 
-            {posts.map( //Destructures posts
-                ({
-                     _id,
-                     userId,
-                     firstName,
-                     lastName,
-                     description,
-                     picturePath,
-                     userPicturePath,
-                     likes,
-                     comments
-                 }) => (
-                    <PostWidget //Creates a post widget for each post
-                        key={_id}
-                        postId={_id}
-                        postUserId={userId}
-                        name={`${firstName} ${lastName}`}
-                        description={description}
-                        picturePath={picturePath}
-                        userPicturePath={userPicturePath}
-                        likes={likes}
-                        comments={comments}
-                        updatePost={setSearchPost}
-                    />
-                )
-            )}
+    let posts_mapping = ({
+                         _id,
+                         userId,
+                         firstName,
+                         lastName,
+                         description,
+                         picturePath,
+                         userPicturePath,
+                         likes,
+                         comments
+                     }) => (
+        <PostWidget //Creates a post widget for each post
+            key={_id}
+            postId={_id}
+            postUserId={userId}
+            name={`${firstName} ${lastName}`}
+            description={description}
+            picturePath={picturePath}
+            userPicturePath={userPicturePath}
+            likes={likes}
+            comments={comments}
+            updatePost={setSearchPost}
+        />
+    )
 
-            {/* Render users */}
-            {people.map(user => (
-                <UserCard user={user} />
-            ))}
-        </Box>
-    );
+    let people_mapping = user => (
+        <UserCard user={user} />
+    )
+
+    if(type === "Posts"){
+        return (
+            <Box>
+                {searchResults.posts.map(posts_mapping)}
+            </Box>
+        )
+    }
+    else if(type === "People"){
+        return (
+            <Box>
+                {searchResults.people.map(people_mapping)}
+            </Box>
+        )
+    }
+    else{
+        return (
+            <Box>
+                {/* Render posts */}
+
+                {searchResults.posts.map(posts_mapping)}
+
+                {/* Render users */}
+                {searchResults.people.map(people_mapping)}
+            </Box>
+        );
+    }
+
 };
 
 export default SearchResults;

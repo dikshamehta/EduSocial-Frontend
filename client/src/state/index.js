@@ -9,6 +9,14 @@ const initialState = {
         posts: [],
         people: [],
         pages: []
+    },
+    filterResults: {
+        results: {
+            posts: [],
+            people: [],
+            pages: []
+        },
+        type: "All"
     }
 };
 
@@ -65,12 +73,14 @@ export const authSlice = createSlice({
             });
             state.searchResults.posts = updatedPosts;
         },
-
         setSearchResults: (state, action) => {
             state.searchResults = action.payload;
+        },
+        setFilterResults: (state, action) => {
+            state.filterResults = action.payload;
         }
     },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests, setSearchPost, setSearchResults } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests, setSearchPost, setSearchResults, setFilterResults } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,83 +1,44 @@
-// import React from 'react';
-// import { ToggleButton, ToggleButtonGroup, Box } from '@mui/material';
-// import { makeStyles } from '@mui/styles';
-//
-// const useStyles = makeStyles((theme) => ({
-//     button: {
-//         borderRadius: '20px', // Adjust the border radius as needed
-//         padding: '8px 16px', // Adjust padding as needed
-//         textTransform: 'none', // Preserve text case
-//     },
-// }));
-//
-// const Filter = ({ categories, selectedCategories, onChange }) => {
-//     const classes = useStyles();
-//
-//     return (
-//         <Box display="flex" flexDirection="row" gap="1rem" alignItems="center">
-//             <span>Filter By:</span>
-//             <ToggleButtonGroup
-//                 value={selectedCategories}
-//                 onChange={onChange}
-//                 aria-label="filter categories"
-//             >
-//                 {categories.map((category) => (
-//                     <ToggleButton key={category} value={category} className={classes.button}>
-//                         {category}
-//                     </ToggleButton>
-//                 ))}
-//             </ToggleButtonGroup>
-//         </Box>
-//     );
-// };
-//
-// export default Filter;
-//
+import React, { useState } from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import {useDispatch, useSelector} from "react-redux";
+import {setFilterResults} from "../state";
 
+// TODO: remove middle variable filter result
 
+function SearchFilter() {
+    const filterResults = useSelector((state)=>state.filterResults);
+    const searchResults = useSelector((state)=>state.searchResults);
+    const dispatch = useDispatch();
 
-import React from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { styled } from '@mui/system';
+    const [value, setValue] = useState(0);
 
-// Styled FilterContainer component
-const FilterContainer = styled(Box)({
-    marginBottom: '20px',
-    display: 'flex',
-    alignItems: 'center',
-});
+    const filterTypes = ['All', 'Posts', 'People', 'Pages'];
 
-// Styled FormControl component
-const StyledFormControl = styled(FormControl)({
-    minWidth: 120,
-    marginRight: '20px',
-});
-
-// Filter component
-const Filter = ({ categories, selectedCategory, onChange }) => {
-    const handleChange = (event) => {
-        onChange(event.target.value);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        console.log(filterTypes[newValue]);
+        dispatch(setFilterResults({ type: filterTypes[newValue] }));
     };
 
     return (
-        <FilterContainer>
-            <StyledFormControl>
-                <InputLabel id="category-label">Category</InputLabel>
-                <Select
-                    labelId="category-label"
-                    id="category-select"
-                    value={selectedCategory}
-                    onChange={handleChange}
-                >
-                    {categories.map((category, index) => (
-                        <MenuItem key={index} value={category}>
-                            {category}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </StyledFormControl>
-        </FilterContainer>
+        <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}>
+            <Tabs
+                orientation="vertical"
+                variant="scrollable"
+                value={value}
+                onChange={handleChange}
+                aria-label="Vertical tabs example"
+                sx={{ borderRight: 1, borderColor: 'divider' }}
+            >
+                <Tab label="All" />
+                <Tab label="Posts" />
+                <Tab label="People" />
+                <Tab label="Pages" />
+            </Tabs>
+        </Box>
     );
-};
+}
 
-export default Filter;
+export default SearchFilter;
