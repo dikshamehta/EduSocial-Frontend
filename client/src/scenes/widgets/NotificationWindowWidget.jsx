@@ -4,6 +4,7 @@ import WidgetWrapper from 'components/WidgetWrapper';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 const NotificationWindowWidget = ({ onClose, anchorEl }) => {
     const _id = useSelector((state) => state.user._id);

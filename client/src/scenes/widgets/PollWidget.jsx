@@ -38,7 +38,7 @@ const PollWidget = ({ parentId }) => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await response.json();
-            console.log(data);
+            
             if (!data.options) {
               throw new Error('ERROR: POLL DATA NOT FOUND');
             }

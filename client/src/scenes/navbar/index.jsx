@@ -83,7 +83,6 @@ const NavBar = () => {
     };
 
     const handleNotificationClick = (event) => {
-      console.log(event.currentTarget);
       setNotificationAnchorEl(event.currentTarget);
       toggleNotifications();
     };
