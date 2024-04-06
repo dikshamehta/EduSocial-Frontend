@@ -1,5 +1,5 @@
 import React from 'react';
-import {Paper, List, ListItem, ListItemText, Avatar, CssBaseline, ThemeProvider} from '@mui/material';
+import {Paper, List, ListItem, ListItemText, Avatar, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import {
     ManageAccountsOutlined,
@@ -20,62 +20,20 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import { useNavigate } from "react-router-dom";
 import PostWidget from "../scenes/widgets/PostWidget";
-
-
+import UserWidget from "../scenes/widgets/UserWidget";
+import FriendListWidget from "../scenes/widgets/FriendListWidget";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT
-
-
-const UserCard = ({ user }) => {
-    const theme = createTheme();
-    const navigate = useNavigate();
-    const { palette } = useTheme();
-    const dark = palette.neutral.dark;
-    const medium = palette.neutral.medium;
-    const main = palette.neutral.main;
-    const { userId, firstName, lastName, username, picturePath, friends } = user;
-
-    return (
-        <WidgetWrapper key={userId}>
-            {/* User info */}
-            <FlexBetween
-                gap="0.5rem"
-                pb="1.1rem"
-                onClick={() => navigate(`/profile/${userId}`)} // Replace `navigate` with your navigation function
-            >
-                {/* User image and basic info */}
-                <FlexBetween gap="1rem">
-                    <UserImage image={picturePath} />
-                    <Box>
-                        <Typography
-                            variant="h4"
-                            color={dark}
-                            fontWeight="500"
-                            sx={{
-                                "&:hover": {
-                                    color: main,
-                                    cursor: "pointer",
-                                },
-                            }}
-                        >
-                            {firstName} {lastName}
-                        </Typography>
-                        <Typography color={medium}>{username}</Typography>
-                        <Typography color={medium}>{friends.length} friends</Typography>
-                    </Box>
-                </FlexBetween>
-                {/* Manage accounts icon */}
-                <ManageAccountsOutlined />
-            </FlexBetween>
-            <Divider/>
-        </WidgetWrapper>
-    );
-};
 
 const SearchResults = () => {
     const filterResults = useSelector((state)=>state.filterResults);
     const type = filterResults.type;
     const searchResults = useSelector((state) => state.searchResults);
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    const { palette } = useTheme();
+    const dark = palette.neutral.dark;
+    const medium = palette.neutral.medium;
+    const main = palette.neutral.main;
 
     let posts_mapping = ({
                          _id,
@@ -103,32 +61,61 @@ const SearchResults = () => {
     )
 
     let people_mapping = user => (
-        <UserCard user={user} />
+        <UserWidget userId={user._id} picturePath={user.picturePath} />
     )
 
+    let people_results = <Box>
+        <WidgetWrapper>
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                People
+            </Typography>
+        </WidgetWrapper>
+        <Divider/>
+
+        {searchResults.people.map(people_mapping)};
+    </Box>
+
+    let posts_results = <Box>
+        <WidgetWrapper>
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                Posts
+            </Typography>
+        </WidgetWrapper>
+        <Divider/>
+        {searchResults.posts.map(posts_mapping)}
+    </Box>
+
     if(type === "Posts"){
-        return (
-            <Box>
-                {searchResults.posts.map(posts_mapping)}
-            </Box>
-        )
+        return posts_results
     }
     else if(type === "People"){
-        return (
-            <Box>
-                {searchResults.people.map(people_mapping)}
-            </Box>
-        )
+        return people_results
     }
     else{
         return (
             <Box>
-                {/* Render posts */}
-
-                {searchResults.posts.map(posts_mapping)}
-
-                {/* Render users */}
-                {searchResults.people.map(people_mapping)}
+                {people_results}
+                {posts_results}
             </Box>
         );
     }
