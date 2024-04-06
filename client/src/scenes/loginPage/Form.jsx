@@ -19,6 +19,8 @@ import FlexBetween from 'components/FlexBetween';
 import { auth, provider } from "./config";
 import { signInWithPopup } from "firebase/auth";
 import styled from "styled-components";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 
@@ -106,6 +108,9 @@ const Form = () => {
     const [ displayTag, setDisplayTag ] = useState(""); //Represent the switch whether someone has clicked tag button
     const [ active , setActive ] = useState(null); //Represent the tag that is clicked
 
+    // ReCAPTCHA
+    const recaptcha = useRef();
+
     // Oauth
         const [value, setValue] = useState("");
 
@@ -177,26 +182,31 @@ const Form = () => {
         }, []);
 
     const register = async (values, onSubmitProps) => { //Allows us to use form data to register
+      const captchaVerified = await verifyCaptcha();
+      if (!captchaVerified) {
+        alert("Captcha verification failed. Please try again.");
+      } else {
         const formData = new FormData(); //Allows us to use image with form info.
-        for (let value in values) { //Loops through values and appends
-            console.log("VALUE", value);
-            formData.append(value, values[value]);
+        for (let value in values) {
+          //Loops through values and appends
+          console.log("VALUE", value);
+          formData.append(value, values[value]);
         }
-        console.log("PICTURE", values.picture.name)
-        console.log("DISPLAY TAG", displayTag)
+        console.log("PICTURE", values.picture.name);
+        console.log("DISPLAY TAG", displayTag);
 
-        
         formData.append("picturePath", values.picture.name);
         formData.append("displayTag", displayTag); //Appends display tag to form data
 
         console.log("FORM DATA", formData);
 
-        const savedUserResponse = await fetch( //Sending form data to this API call
-            `http://localhost:${serverPort}/auth/register`,
-            {
-                method: "POST",
-                body: formData,
-            }
+        const savedUserResponse = await fetch(
+          //Sending form data to this API call
+          `http://localhost:${serverPort}/auth/register`,
+          {
+            method: "POST",
+            body: formData,
+          }
         );
         const savedUser = await savedUserResponse.json(); //Converts response to JSON
         onSubmitProps.resetForm(); //Resets form
@@ -204,26 +214,67 @@ const Form = () => {
         setDisplayTag(""); //Resets display tag
 
         if (savedUser) {
-            setPageType("login"); //Redirects to login page
+          setPageType("login"); //Redirects to login page
         }
+      }
     };
 
-    const login = async (values, onSubmitProps) => { //Allows us to use form data to login
-        const loggedInResponse = await fetch(`http://localhost:${serverPort}/auth/login`, {
+    const login = async (values, onSubmitProps) => {
+      const captchaVerified = await verifyCaptcha();
+      if (!captchaVerified) {
+        alert("Captcha verification failed. Please try again.");
+      } else {
+        const loggedInResponse = await fetch(
+          `http://localhost:${serverPort}/auth/login`,
+          {
             method: "POST",
-            headers: { "Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(values), //Already formatted
-            
-        });
+          }
+        );
         const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm(); //Resets form
         if (loggedIn) {
-            dispatch(setLogin({
-                user: loggedIn.user,
-                token: loggedIn.token,
-            }));
-            navigate("/home"); //Navigates to home page
+          dispatch(
+            setLogin({
+              user: loggedIn.user,
+              token: loggedIn.token,
+            })
+          );
+          navigate("/home"); //Navigates to home page
         }
+      }
+    };
+
+    const verifyCaptcha = async () => {
+      const captchaValue = recaptcha.current.getValue();
+
+      if (captchaValue) {
+        const response = await fetch(
+          `http://localhost:${serverPort}/auth/captcha`,
+          {
+            method: "POST",
+            body: JSON.stringify({ token: captchaValue }),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        const captchaResponse = await response.json();
+        if (captchaResponse.success) {
+          console.log("Captcha verified");
+          return true;
+        } else {
+          console.log("Captcha failed");
+          return null;
+        }
+      } else {
+        console.log("Captcha not verified");
+        return null;
+      }
+    };
+
+    const refreshCaptcha = () => {
+      recaptcha.current.reset();
     };
 
     const handleFormSubmit = async (values, onSubmitProps) => { //Handles form submission
@@ -327,9 +378,7 @@ const Form = () => {
                       )}
                     </Dropzone>
                   </Box>
-                
                 </>
-                
               )}
 
               <TextField
@@ -357,45 +406,38 @@ const Form = () => {
               {/* Display tag */}
               {isRegister && (
                 <>
-                  <FlexBetween
-                    sx={{ gridColumn: "span 4" }}
-                    gap="1rem"
-                  >
-                    <Typography
-                      color={mediumMain}
-                    >Choose an option to customize your feed:</Typography>
+                  <FlexBetween sx={{ gridColumn: "span 4" }} gap="1rem">
+                    <Typography color={mediumMain}>
+                      Choose an option to customize your feed:
+                    </Typography>
                   </FlexBetween>
-                  <FlexBetween 
-                      alignContent={"center"}
-                      justifyContent={"center"}
-                      ml="10rem"
-                      mt="-1rem"
-                      sx={{ gridColumn: "span 4" }}
+                  <FlexBetween
+                    alignContent={"center"}
+                    justifyContent={"center"}
+                    ml="10rem"
+                    mt="-1rem"
+                    sx={{ gridColumn: "span 4" }}
                   >
-                      <>
-                          <div>
-                              {types.map((type) => (
-                                  <Tab
-                                      key={type}
-                                      active={active === type}
-                                      onClick={(e) => {
-                                          e.preventDefault();
-                                          setActive(type);
-                                          setDisplayTag(String (type));
-                                        
-
-                                      }}
-                                      onChange = {handleChange}
-                                      onBlur = {handleBlur}
-                                      >
-                                      
-                                      {type}
-                                  </Tab>
-                              ))}
-                          </div>
-                          <p />
-                      </>
-
+                    <>
+                      <div>
+                        {types.map((type) => (
+                          <Tab
+                            key={type}
+                            active={active === type}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setActive(type);
+                              setDisplayTag(String(type));
+                            }}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          >
+                            {type}
+                          </Tab>
+                        ))}
+                      </div>
+                      <p />
+                    </>
                   </FlexBetween>
                 </>
               )}
@@ -403,6 +445,12 @@ const Form = () => {
 
             {/* Buttons */}
             <Box>
+              <Box sx={{ display: "flex", justifyContent: "center", mt: "2rem" }}>
+                <ReCAPTCHA
+                  ref={recaptcha}
+                  sitekey={process.env.REACT_APP_SITE_KEY}
+                />
+              </Box>
               <Button
                 fullWidth
                 type="submit"
@@ -428,12 +476,15 @@ const Form = () => {
                 }}
                 onClick={handleClick}
               >
-                {isLogin ? "LOGIN / Sign in with GOOGLE" : "REGISTER with GOOGLE"}
+                {isLogin
+                  ? "LOGIN / Sign in with GOOGLE"
+                  : "REGISTER with GOOGLE"}
               </Button>
               <Typography
                 onClick={() => {
                   setPageType(isLogin ? "register" : "login");
                   resetForm();
+                  refreshCaptcha();
                 }}
                 sx={{
                   textDecoration: "underline",

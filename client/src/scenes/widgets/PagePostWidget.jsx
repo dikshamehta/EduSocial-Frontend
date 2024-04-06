@@ -32,17 +32,6 @@ const PagePostWidget = ({
   const loggedInUserUsername = useSelector((state) => state.user.username);
   const loggedInUserPicturePath = useSelector((state) => state.user.picturePath);
 
-  console.log(postId,
-    postUserId,
-    name,
-    description,
-    picturePath,
-    userPicturePath,
-    videoPath,
-    pollData,
-    likes,
-    comments,);
-
   const [userPagePostState, setUserPagePostState] = useState({
     isLiked: false,
     likeCount: Object.keys(likes).length,

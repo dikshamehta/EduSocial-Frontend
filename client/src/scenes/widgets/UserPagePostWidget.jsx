@@ -59,7 +59,6 @@ const UserPagePostWidget = ({ pageId, picturePath }) => {
             }
         }
         if (isPoll) {
-          console.log(poll);
             const pollData = {
                 question: poll.question,
                 options: poll.options
@@ -290,7 +289,6 @@ const UserPagePostWidget = ({ pageId, picturePath }) => {
                 onClick={() => {
                   setIsPoll(!isPoll);
                   setPoll(null);
-                  console.log(isPoll);
                   if (isImage) {
                     setIsImage(!isImage);
                     setImage(null);
