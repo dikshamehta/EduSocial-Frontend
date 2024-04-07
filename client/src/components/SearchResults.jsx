@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import PostWidget from "../scenes/widgets/PostWidget";
 import UserWidget from "../scenes/widgets/UserWidget";
 import FriendListWidget from "../scenes/widgets/FriendListWidget";
+import SortingOptions from "./SortOptions";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT
 
@@ -34,6 +35,13 @@ const SearchResults = () => {
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
+
+    const [sortValue, setSortValue] = useState('ascending');
+
+    const handleSortChange = (event) => {
+        setSortValue(event.target.value);
+        // Perform sorting logic based on the selected value
+    };
 
     let posts_mapping = ({
                          _id,
@@ -65,7 +73,8 @@ const SearchResults = () => {
     )
 
     let people_results = <Box>
-        <WidgetWrapper>
+        <WidgetWrapper  display={"flex"} flexDirection={"row"}
+        >
             <Typography
                 variant="h4"
                 color={dark}
@@ -79,6 +88,7 @@ const SearchResults = () => {
             >
                 People
             </Typography>
+            <SortingOptions sortValue = {"ascending"} onSortChange={handleSortChange}/>
         </WidgetWrapper>
         <Divider/>
 
@@ -104,6 +114,8 @@ const SearchResults = () => {
         <Divider/>
         {searchResults.posts.map(posts_mapping)}
     </Box>
+
+
 
     if(type === "Posts"){
         return posts_results
