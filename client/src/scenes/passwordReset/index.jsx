@@ -1,9 +1,13 @@
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import EmailForm from "./emailForm";
+import PasswordForm from "./resetForm";
+import { useParams } from "react-router-dom";
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage = ( {formType}) => {
+    const { jwt } = useParams();
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+    //const 
 
     return (
         <Box>
@@ -28,7 +32,7 @@ const ForgotPasswordPage = () => {
                 <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem"}}>
                     Reset your password.
                 </Typography>
-                <EmailForm />
+                {formType === "email" ? <EmailForm /> : <PasswordForm jsonToken={jwt} />}
             </Box>
         </Box>
     );

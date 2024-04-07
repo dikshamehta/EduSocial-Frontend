@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 const EmailForm = () => {
-    const token = useSelector((state) => state.token);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
     const [emailSuccess, setEmailSuccess] = useState("");
@@ -25,13 +24,11 @@ const EmailForm = () => {
         try {
             const res = await fetch(`http://localhost:${serverPort}/user/email/${email}`, {
                 method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
             });
 
             const data = await res.json();
-            data === true ? setEmailSuccess("Check email for password reset link. Link will expire in 30 minutes.") : setEmailError("Email not found.");
+            
+            data ? setEmailSuccess("Email found. Check email for password reset link.") : setEmailError("Email not found.");
 
         } catch (err) {
             if (err.status === 404) {
