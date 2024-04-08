@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
-const SortingOptions = ({ sortValue, onSortChange }) => {
+const SortingOptions = ({ sortValue, sortOptions, onSortChange }) => {
     return (
         <FormControl sx={{ minWidth: 120 }}>
             <InputLabel id="sorting-options-label">Sort By</InputLabel>
@@ -12,8 +12,7 @@ const SortingOptions = ({ sortValue, onSortChange }) => {
                 onChange={onSortChange}
                 label="Sort By"
             >
-                <MenuItem value="ascending">Ascending</MenuItem>
-                <MenuItem value="descending">Descending</MenuItem>
+                {sortOptions.map(option => <MenuItem value={option}>{option}</MenuItem>)}
             </Select>
         </FormControl>
     );

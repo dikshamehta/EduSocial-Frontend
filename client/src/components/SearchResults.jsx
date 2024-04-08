@@ -15,7 +15,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {setPost, setSearchPost} from "state";
+import {setPost, setSearchPost, setSearchResults} from "state";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import { useNavigate } from "react-router-dom";
@@ -27,20 +27,37 @@ import SortingOptions from "./SortOptions";
 const serverPort = process.env.REACT_APP_SERVER_PORT
 
 const SearchResults = () => {
+    const dispatch = useDispatch();
+    const searchResults = useSelector((state) => state.searchResults);
     const filterResults = useSelector((state)=>state.filterResults);
     const type = filterResults.type;
-    const searchResults = useSelector((state) => state.searchResults);
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
-    const [sortValue, setSortValue] = useState('ascending');
+    const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
+    const [peopleSortValue, setPeopleSortValue] = useState('Relevance');
 
-    const handleSortChange = (event) => {
-        setSortValue(event.target.value);
-        // Perform sorting logic based on the selected value
+    const handlePeopleSortChange = (event) => {
+        setPeopleSortValue(event.target.value);
+        console.log(event.target.value);
+        let updatedSearchResults = structuredClone(searchResults);
+        if(event.target.value == peopleSortOptions[0]) {
+            updatedSearchResults.people.sort(
+                (a, b) => a.firstName.localeCompare(b.firstName)
+            );
+        } else if (event.target.value == peopleSortOptions[1]) {
+            updatedSearchResults.people.sort(
+                (a, b) => b.firstName.localeCompare(a.firstName)
+            );
+        } else {
+
+        }
+        console.log('updated people')
+        console.log(updatedSearchResults.people);
+        dispatch(setSearchResults(updatedSearchResults));
     };
 
     let posts_mapping = ({
@@ -88,7 +105,10 @@ const SearchResults = () => {
             >
                 People
             </Typography>
-            <SortingOptions sortValue = {"ascending"} onSortChange={handleSortChange}/>
+            <SortingOptions 
+                sortValue = {peopleSortValue} 
+                sortOptions={peopleSortOptions} 
+                onSortChange={handlePeopleSortChange}/>
         </WidgetWrapper>
         <Divider/>
 

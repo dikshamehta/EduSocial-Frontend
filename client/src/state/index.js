@@ -74,7 +74,7 @@ export const authSlice = createSlice({
             state.searchResults.posts = updatedPosts;
         },
         setSearchResults: (state, action) => {
-            state.searchResults = action.payload;
+            state.searchResults = structuredClone(action.payload);
         },
         setFilterResults: (state, action) => {
             state.filterResults = action.payload;
