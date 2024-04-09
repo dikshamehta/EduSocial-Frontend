@@ -35,12 +35,33 @@ const SearchResults = () => {
     const dispatch = useDispatch();
     const searchResults = useSelector((state) => state.searchResults);
     const filterResults = useSelector((state)=>state.filterResults);
+
+    const loggedInUser = useSelector((state) => state.user);
+    const loggedInUserFriends = useSelector((state) => state.user.friends);
+    const relevanceComparisonSet = new Set();
+    loggedInUserFriends.forEach(friend => relevanceComparisonSet.add(friend._id));
+
+    // including the logged in user itself in the relevance comparison set
+    relevanceComparisonSet.add(loggedInUser._id);
+
     const type = filterResults.type;
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
 
+
+
+    function countRelevance(friends){
+        let relevance = 0;
+        friends.forEach((friend) => {
+            if(relevanceComparisonSet.has(friend._id)){
+                relevance++;
+            }
+        });
+        console.log(relevance);
+        return relevance;
+    }
     const handlePeopleSortChange = (event) => {
         setPeopleSortValue(event.target.value);
         console.log(event.target.value);
@@ -54,7 +75,10 @@ const SearchResults = () => {
                 (a, b) => b.firstName.localeCompare(a.firstName)
             );
         } else {
-            //TODO: relevance ?
+            console.log("Else");
+            updatedSearchResults.people.sort(
+                (a, b) => countRelevance(b.friends) - countRelevance(a.friends)
+            );
         }
         dispatch(setSearchResults(updatedSearchResults));
     };
