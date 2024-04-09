@@ -49,17 +49,18 @@ const SearchResults = () => {
 
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
+    // TODO: the default peopleSortValue must match the actual order in the people list when no sort option 
+    // is selected by user.
 
 
 
-    function countRelevance(friends){
+    function countRelevance(friendIds){
         let relevance = 0;
-        friends.forEach((friend) => {
-            if(relevanceComparisonSet.has(friend._id)){
+        friendIds.forEach((friendId) => {
+            if(relevanceComparisonSet.has(friendId)){
                 relevance++;
             }
         });
-        console.log(relevance);
         return relevance;
     }
     const handlePeopleSortChange = (event) => {
@@ -75,7 +76,6 @@ const SearchResults = () => {
                 (a, b) => b.firstName.localeCompare(a.firstName)
             );
         } else {
-            console.log("Else");
             updatedSearchResults.people.sort(
                 (a, b) => countRelevance(b.friends) - countRelevance(a.friends)
             );
