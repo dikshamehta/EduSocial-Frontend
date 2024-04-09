@@ -27,18 +27,19 @@ import SortingOptions from "./SortOptions";
 const serverPort = process.env.REACT_APP_SERVER_PORT
 
 const SearchResults = () => {
-    const dispatch = useDispatch();
-    const searchResults = useSelector((state) => state.searchResults);
-    const filterResults = useSelector((state)=>state.filterResults);
-    const type = filterResults.type;
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
+    const dispatch = useDispatch();
+    const searchResults = useSelector((state) => state.searchResults);
+    const filterResults = useSelector((state)=>state.filterResults);
+    const type = filterResults.type;
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
-    const [peopleSortValue, setPeopleSortValue] = useState('Relevance');
+    const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
 
     const handlePeopleSortChange = (event) => {
         setPeopleSortValue(event.target.value);
@@ -53,10 +54,8 @@ const SearchResults = () => {
                 (a, b) => b.firstName.localeCompare(a.firstName)
             );
         } else {
-
+            //TODO: relevance ?
         }
-        console.log('updated people')
-        console.log(updatedSearchResults.people);
         dispatch(setSearchResults(updatedSearchResults));
     };
 

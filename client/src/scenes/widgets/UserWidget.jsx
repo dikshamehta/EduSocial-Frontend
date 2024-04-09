@@ -37,7 +37,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
     useEffect(() => { //When you enter this page, because we have empty array, getUser will be called and component gets rendered when you first get to pag 
         getUser();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (!user) return null; //If user is not found, return null
 
