@@ -3,7 +3,8 @@ import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFriends } from 'state';
+import { setFriends, setRecommendedFriends } from 'state';
+
 
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 
@@ -12,6 +13,7 @@ const RecommendedFriendsList = ({ userId }) => {
     const { palette } = useTheme();
     const token = useSelector((state) => state.token);
     const friends = useSelector((state) => state.user.friends);
+
 
     const getFriends = async () => {
         const response = await fetch(`http://localhost:${serverPort}/user/${userId}/friends`, {
@@ -26,7 +28,48 @@ const RecommendedFriendsList = ({ userId }) => {
         getFriends();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const recommendedFriends = useSelector((state) => state.recommendedFriends);
+     //Display recommended friends
+    const getRecommendedFriends = async () => {
+        //Loop through friends array
+        //Display friends of friends
+        let tempRecommendedFriends = [];
+        for (let i = 0; i < friends.length; i++) {
+            let friendId = friends[i]._id;
+            const response = await fetch(`http://localhost:${serverPort}/user/${friendId}/friends`, {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await response.json();
+            for (let j = 0; j < data.length; j++) {
+                if (data[j]._id !== userId && !friends.includes(data[j]) && !tempRecommendedFriends.includes(data[j])) {
+                    tempRecommendedFriends.push(data[j]);
+                }
+            }
+        }
+
+        console.log("Temp Recommended Friends: ", tempRecommendedFriends);
+
+        let counter = 0;
+        let randomizedRecommendedFriends = [];
+        for (let i = 0; i < tempRecommendedFriends.length; i++) {
+            if (counter === 5) {
+                break;
+            }
+            else {
+                let recommendedFriend = tempRecommendedFriends[i];
+                randomizedRecommendedFriends.push(recommendedFriend);
+                counter++;
+            }
+        }
+
+        // console.log("Recommended Friends: ", recommendedFriends);
+        dispatch(setRecommendedFriends({ recommendedFriends: randomizedRecommendedFriends }));
+    };
+
+    
     return (
+        getRecommendedFriends(),
         <WidgetWrapper>
             <Typography
                 color={palette.neutral.dark}
@@ -37,7 +80,7 @@ const RecommendedFriendsList = ({ userId }) => {
                 Recommended Friends
             </Typography>
             <Box display="flex" flexDirection="column" gap="1.5rem">
-                {/* {friends.map((friend) => (
+                {recommendedFriends.map((friend) => (
                     <Friend
                         key={friend._id}
                         friendId={friend._id}
@@ -45,7 +88,7 @@ const RecommendedFriendsList = ({ userId }) => {
                         // subtitle={friend.occupation}
                         userPicturePath={friend.picturePath}
                     />
-                ))} */}
+                ))}
             </Box>
         </WidgetWrapper>
     );

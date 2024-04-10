@@ -87,11 +87,24 @@ const ProfilePage = () => {
                             <FriendListWidget userId={userId} />
                         </Box>
 
-                        <Box flexBasis={isNonMobileScreens ? "42%" : undefined} mt={isNonMobileScreens ? undefined : "2rem"}>
+                        {userId !== loggedInUserId
+                        ?
+                            <Box flexBasis={isNonMobileScreens ? "42%" : undefined} mt={isNonMobileScreens ? "-2rem" : "2rem"}>
+                                <PostsWidget userId={userId} isProfile />
+                            </Box>
+                        :
+                            <Box flexBasis={isNonMobileScreens ? "42%" : undefined} mt={isNonMobileScreens ? undefined : "2rem"}>
+                                <MyPostWidget picturePath={user.picturePath} />
+                                <Box m="2rem 0" />
+                                <PostsWidget userId={userId} isProfile />
+                            </Box>
+                        }
+
+                        {/* <Box flexBasis={isNonMobileScreens ? "42%" : undefined} mt={isNonMobileScreens ? undefined : "2rem"}>
                             <MyPostWidget picturePath={user.picturePath} />
                             <Box m="2rem 0" />
                             <PostsWidget userId={userId} isProfile />
-                        </Box>
+                        </Box> */}
                     </>
 
                     // <>

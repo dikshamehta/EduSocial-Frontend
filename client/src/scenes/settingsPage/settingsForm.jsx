@@ -49,7 +49,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
  
  
 const SettingsForm = () => {

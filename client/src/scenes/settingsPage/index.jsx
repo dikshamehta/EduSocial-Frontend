@@ -2,6 +2,7 @@ import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
 import Adsform from "../ADmanagement/ads";
 import SettingsForm from "./settingsForm";
 import { useNavigate } from 'react-router-dom';
+import BlockedForm from './blockedForm';
  
 const SettingsPage = () => {
     const theme = useTheme();
@@ -49,6 +50,24 @@ const SettingsPage = () => {
                     Settings
                 </Typography>
                 <SettingsForm />
+            </Box>
+
+            <Box
+                width={isNonMobileScreens ? "50%" : "93%"}
+                p="2rem"
+                m="2rem auto"
+                borderRadius="1.5rem"
+                backgroundColor={theme.palette.background.alt}
+            >
+                {/* <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem"}}>
+                    Welcome to EduSocial, the Social Media Made for Education.
+                   
+                </Typography> */}
+                <Typography fontWeight="700" variant="h4" sx={{ mb: "1.5rem"}}>
+                    Who Can See Your Content
+                </Typography>
+                <BlockedForm />
+                
             </Box>
         </Box>
     );

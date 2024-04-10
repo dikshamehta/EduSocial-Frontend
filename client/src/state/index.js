@@ -17,7 +17,8 @@ const initialState = {
             pages: []
         },
         type: "All"
-    }
+    },
+    recommendedFriends: []
 };
 
 export const authSlice = createSlice({
@@ -41,6 +42,14 @@ export const authSlice = createSlice({
             }
             else {
                 console.log("User friends not found");
+            }
+        },
+        setBlockedUsers: (state, action) => {
+            if (state.user) {
+                state.user.blockedUsers = action.payload.blockedUsers;
+            }
+            else {
+                console.log("User blocked users not found");
             }
         },
         setFriendRequests: (state, action) => {
@@ -78,9 +87,12 @@ export const authSlice = createSlice({
         },
         setFilterResults: (state, action) => {
             state.filterResults = action.payload;
+        },
+        setRecommendedFriends: (state, action) => {
+            state.recommendedFriends = action.payload.recommendedFriends;
         }
     },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests, setSearchPost, setSearchResults, setFilterResults } = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setFriendRequests, setSearchPost, setSearchResults, setFilterResults, setBlockedUsers, setRecommendedFriends } = authSlice.actions;
 export default authSlice.reducer;

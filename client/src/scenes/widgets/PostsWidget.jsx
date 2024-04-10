@@ -83,7 +83,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         console.log("I am here before")
         console.log(recentPostOrder)
         
-        if (recentPostOrder === true && displayTag !== "") {
+        if (recentPostOrder === true && displayTag !== "") { //Sort by algorithm
             for (let i = 0; i < posts.length; i++) {
                 if (posts[i].displayTag === displayTag) {
                     posts.unshift(posts.splice(i, 1)[0]);
