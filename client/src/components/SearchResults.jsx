@@ -23,6 +23,7 @@ import PostWidget from "../scenes/widgets/PostWidget";
 import UserWidget from "../scenes/widgets/UserWidget";
 import FriendListWidget from "../scenes/widgets/FriendListWidget";
 import SortingOptions from "./SortOptions";
+import PageExploreWidget from "../scenes/widgets/PageExploreWidget";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT
 
@@ -112,6 +113,10 @@ const SearchResults = () => {
         <UserWidget userId={user._id} picturePath={user.picturePath} />
     )
 
+    let pages_mapping = page => (
+        <PageExploreWidget page={page}/>
+    )
+
     let people_results = <Box>
         <WidgetWrapper  display={"flex"} flexDirection={"row"}
         >
@@ -158,6 +163,26 @@ const SearchResults = () => {
         {searchResults.posts.map(posts_mapping)}
     </Box>
 
+    let pages_results = <Box>
+        <WidgetWrapper>
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                Pages
+            </Typography>
+        </WidgetWrapper>
+        <Divider/>
+        {searchResults.pages.map(pages_mapping)}
+    </Box>
+
 
 
     if(type === "Posts"){
@@ -166,11 +191,15 @@ const SearchResults = () => {
     else if(type === "People"){
         return people_results
     }
+    else if(type === "Pages"){
+        return pages_results
+    }
     else{
         return (
             <Box>
                 {people_results}
                 {posts_results}
+                {pages_results}
             </Box>
         );
     }
