@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Paper, List, ListItem, ListItemText, Avatar, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import {
@@ -36,24 +36,39 @@ const SearchResults = () => {
     const dispatch = useDispatch();
     const searchResults = useSelector((state) => state.searchResults);
     const filterResults = useSelector((state)=>state.filterResults);
-
-    const loggedInUser = useSelector((state) => state.user);
-    const loggedInUserFriends = useSelector((state) => state.user.friends);
-    const relevanceComparisonSet = new Set();
-    loggedInUserFriends.forEach(friend => relevanceComparisonSet.add(friend._id));
-
-    // including the logged in user itself in the relevance comparison set
-    relevanceComparisonSet.add(loggedInUser._id);
-
     const type = filterResults.type;
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
+    const authenticatedUser = useSelector((state) => state.user);
+    const token = useSelector((state) => state.token);
+    const loggedInUserFriends = useSelector((state) => state.user.friends);
+    const relevanceComparisonSet = new Set();
+    loggedInUserFriends.forEach(friend => relevanceComparisonSet.add(friend._id));
+    // including the logged in user itself in the relevance comparison set
+    relevanceComparisonSet.add(authenticatedUser._id);
+
+    // loggedInUser contains the full details of authenticatedUser
+    const [loggedInUser, setLoggedInUser] = useState(null);
+
+    // Fetching user details (displayTag is required for sorting posts based on relevance)
+    useEffect(()=> {
+        async function fetchUser() {
+            const response = await fetch(`http://localhost:${serverPort}/user/${authenticatedUser._id}`, { //API call
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await response.json();
+            setLoggedInUser(data);
+        }
+        fetchUser();
+    }, [authenticatedUser]);
+
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
+    const postSortOptions = ["Latest", "Oldest", "Relevance"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
+    const [postSortValue, setPostSortValue] = useState(postSortOptions[0]);
     // TODO: the default peopleSortValue must match the actual order in the people list when no sort option 
     // is selected by user.
-
-
 
     function countRelevance(friendIds){
         let relevance = 0;
@@ -80,6 +95,33 @@ const SearchResults = () => {
             updatedSearchResults.people.sort(
                 (a, b) => countRelevance(b.friends) - countRelevance(a.friends)
             );
+        }
+        dispatch(setSearchResults(updatedSearchResults));
+    };
+
+    const handlePostSortChange = (event) => {
+        setPostSortValue(event.target.value);
+        console.log(event.target.value);
+        let updatedSearchResults = structuredClone(searchResults);
+        if(event.target.value == postSortOptions[0]) {
+            updatedSearchResults.posts.sort(
+                (a, b) => a.createdAt < b.createdAt ? -1:1
+            )
+        } else if (event.target.value == postSortOptions[1]) {
+            updatedSearchResults.posts.sort(
+                (a, b) => b.createdAt < a.createdAt ? -1:1
+            )
+        } else {
+            let relevantPosts = []
+            let remainingPosts = []
+            updatedSearchResults.posts.forEach((post) => {
+                if(post.displayTag == loggedInUser.displayTag) {
+                    relevantPosts.push(post);
+                } else {
+                    remainingPosts.push(post);
+                }
+            });
+            updatedSearchResults.posts = relevantPosts.concat(remainingPosts);
         }
         dispatch(setSearchResults(updatedSearchResults));
     };
@@ -158,6 +200,10 @@ const SearchResults = () => {
             >
                 Posts
             </Typography>
+            <SortingOptions 
+                sortValue = {postSortValue} 
+                sortOptions={postSortOptions} 
+                onSortChange={handlePostSortChange}/>
         </WidgetWrapper>
         <Divider/>
         {searchResults.posts.map(posts_mapping)}
