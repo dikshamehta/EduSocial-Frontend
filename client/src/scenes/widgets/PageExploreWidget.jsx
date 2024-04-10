@@ -1,5 +1,5 @@
-import React from "react";
-import { Typography, Tooltip, Button, Box } from "@mui/material";
+import React, {useState} from "react";
+import {Typography, Tooltip, Button, Box, Alert} from "@mui/material";
 import WidgetWrapper from "components/WidgetWrapper";
 import { Grid } from "@mui/material";
 import PageImage from "components/PageImage";
@@ -9,11 +9,13 @@ import { useTheme } from "@mui/material";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 
-const PageExploreWidget = ({ page, navigateToPage }) => {
+
+const PageExploreWidget = ({ page }) => {
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
+  const [popupMessage, setPopupMessage] = useState(null); // State for popup message
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
 
@@ -28,6 +30,18 @@ const PageExploreWidget = ({ page, navigateToPage }) => {
     }
   };
 
+  function navigateToPage(){
+      const isMember = page.pageMembers.includes(_id);
+      if (isMember) {
+          navigate(`/page/${page._id}`);
+      } else {
+          setPopupMessage("You are not a member of this page.");
+          setTimeout(() => {
+              setPopupMessage(null);
+          }, 5000);
+      }
+    }
+
   return (
     <WidgetWrapper>
       {/* Page information */}
@@ -37,9 +51,22 @@ const PageExploreWidget = ({ page, navigateToPage }) => {
         alignItems="center"
         spacing={2}
         width="171.03px"
-        onClick={() => navigateToPage(page._id)}
+        onClick={() => navigateToPage()}
         sx={{ cursor: "pointer" }}
       >
+          {popupMessage && (
+              <Box
+                  position="fixed"
+                  top="140px"
+                  left="43vw"
+                  transform="translateX(-50%)"
+                  alignItems="center"
+              >
+                  <Alert severity="warning" sx={{ width: "auto", textAlign: "center" }}>
+                      {popupMessage}
+                  </Alert>
+              </Box>
+          )}
         <Typography variant="h6" color={dark}>
           {page.pageMembers.length}{" "}
           {page.pageMembers.length === 1 ? "Member" : "Members"}
