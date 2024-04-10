@@ -1,5 +1,5 @@
 import React from 'react';
-import {Paper, List, ListItem, ListItemText, Avatar, CssBaseline, ThemeProvider} from '@mui/material';
+import {Paper, List, ListItem, ListItemText, Avatar, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import {
     ManageAccountsOutlined,
@@ -15,67 +15,74 @@ import WidgetWrapper from "components/WidgetWrapper";
 import Friend from "components/Friend";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {setPost, setSearchPost} from "state";
+import {setPost, setSearchPost, setSearchResults} from "state";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import XIcon from '@mui/icons-material/X';
 import { useNavigate } from "react-router-dom";
 import PostWidget from "../scenes/widgets/PostWidget";
-
-
+import UserWidget from "../scenes/widgets/UserWidget";
+import FriendListWidget from "../scenes/widgets/FriendListWidget";
+import SortingOptions from "./SortOptions";
+import PageExploreWidget from "../scenes/widgets/PageExploreWidget";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT
 
-
-const UserCard = ({ user }) => {
-    const theme = createTheme();
-    const navigate = useNavigate();
+const SearchResults = () => {
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-    const { userId, firstName, lastName, username, picturePath, friends } = user;
 
-    return (
-        <WidgetWrapper key={userId}>
-            {/* User info */}
-            <FlexBetween
-                gap="0.5rem"
-                pb="1.1rem"
-                onClick={() => navigate(`/profile/${userId}`)} // Replace `navigate` with your navigation function
-            >
-                {/* User image and basic info */}
-                <FlexBetween gap="1rem">
-                    <UserImage image={picturePath} />
-                    <Box>
-                        <Typography
-                            variant="h4"
-                            color={dark}
-                            fontWeight="500"
-                            sx={{
-                                "&:hover": {
-                                    color: main,
-                                    cursor: "pointer",
-                                },
-                            }}
-                        >
-                            {firstName} {lastName}
-                        </Typography>
-                        <Typography color={medium}>{username}</Typography>
-                        <Typography color={medium}>{friends.length} friends</Typography>
-                    </Box>
-                </FlexBetween>
-                {/* Manage accounts icon */}
-                <ManageAccountsOutlined />
-            </FlexBetween>
-            <Divider/>
-        </WidgetWrapper>
-    );
-};
-
-const SearchResults = () => {
-    const filterResults = useSelector((state)=>state.filterResults);
-    const type = filterResults.type;
+    const dispatch = useDispatch();
     const searchResults = useSelector((state) => state.searchResults);
+    const filterResults = useSelector((state)=>state.filterResults);
+
+    const loggedInUser = useSelector((state) => state.user);
+    const loggedInUserFriends = useSelector((state) => state.user.friends);
+    const relevanceComparisonSet = new Set();
+    loggedInUserFriends.forEach(friend => relevanceComparisonSet.add(friend._id));
+
+    // including the logged in user itself in the relevance comparison set
+    relevanceComparisonSet.add(loggedInUser._id);
+
+    const type = filterResults.type;
+    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+
+    const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
+    const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
+    // TODO: the default peopleSortValue must match the actual order in the people list when no sort option 
+    // is selected by user.
+
+
+
+    function countRelevance(friendIds){
+        let relevance = 0;
+        friendIds.forEach((friendId) => {
+            if(relevanceComparisonSet.has(friendId)){
+                relevance++;
+            }
+        });
+        return relevance;
+    }
+    const handlePeopleSortChange = (event) => {
+        setPeopleSortValue(event.target.value);
+        console.log(event.target.value);
+        let updatedSearchResults = structuredClone(searchResults);
+        if(event.target.value == peopleSortOptions[0]) {
+            updatedSearchResults.people.sort(
+                (a, b) => a.firstName.localeCompare(b.firstName)
+            );
+        } else if (event.target.value == peopleSortOptions[1]) {
+            updatedSearchResults.people.sort(
+                (a, b) => b.firstName.localeCompare(a.firstName)
+            );
+        } else {
+            updatedSearchResults.people.sort(
+                (a, b) => countRelevance(b.friends) - countRelevance(a.friends)
+            );
+        }
+        dispatch(setSearchResults(updatedSearchResults));
+    };
 
     let posts_mapping = ({
                          _id,
@@ -103,32 +110,96 @@ const SearchResults = () => {
     )
 
     let people_mapping = user => (
-        <UserCard user={user} />
+        <UserWidget userId={user._id} picturePath={user.picturePath} />
     )
 
+    let pages_mapping = page => (
+        <PageExploreWidget page={page}/>
+    )
+
+    let people_results = <Box>
+        <WidgetWrapper  display={"flex"} flexDirection={"row"}
+        >
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                People
+            </Typography>
+            <SortingOptions 
+                sortValue = {peopleSortValue} 
+                sortOptions={peopleSortOptions} 
+                onSortChange={handlePeopleSortChange}/>
+        </WidgetWrapper>
+        <Divider/>
+
+        {searchResults.people.map(people_mapping)};
+    </Box>
+
+    let posts_results = <Box>
+        <WidgetWrapper>
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                Posts
+            </Typography>
+        </WidgetWrapper>
+        <Divider/>
+        {searchResults.posts.map(posts_mapping)}
+    </Box>
+
+    let pages_results = <Box>
+        <WidgetWrapper>
+            <Typography
+                variant="h4"
+                color={dark}
+                fontWeight="500"
+                sx={{
+                    "&:hover": {
+                        color: main,
+                        cursor: "pointer",
+                    },
+                }}
+            >
+                Pages
+            </Typography>
+        </WidgetWrapper>
+        <Divider/>
+        {searchResults.pages.map(pages_mapping)}
+    </Box>
+
+
+
     if(type === "Posts"){
-        return (
-            <Box>
-                {searchResults.posts.map(posts_mapping)}
-            </Box>
-        )
+        return posts_results
     }
     else if(type === "People"){
-        return (
-            <Box>
-                {searchResults.people.map(people_mapping)}
-            </Box>
-        )
+        return people_results
+    }
+    else if(type === "Pages"){
+        return pages_results
     }
     else{
         return (
             <Box>
-                {/* Render posts */}
-
-                {searchResults.posts.map(posts_mapping)}
-
-                {/* Render users */}
-                {searchResults.people.map(people_mapping)}
+                {people_results}
+                {posts_results}
+                {pages_results}
             </Box>
         );
     }

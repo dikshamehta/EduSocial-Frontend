@@ -48,19 +48,6 @@ const PageExplorePage = () => {
     setSelectedFilters(selectedOptions.map((option) => option.value));
   };
 
-  const navigateToPage = (pageId) => {
-    const page = pages.find((page) => page._id === pageId);
-    const isMember = page.pageMembers.includes(userId);
-    if (isMember) {
-      navigate(`/page/${pageId}`);
-    } else {
-      setPopupMessage("You are not a member of this page.");
-      setTimeout(() => {
-        setPopupMessage(null);
-      }, 5000);
-    }
-  };
-
   return (
     <Box>
       <NavBar />
@@ -121,7 +108,6 @@ const PageExplorePage = () => {
                 <Grid item key={page._id}>
                   <PageExploreWidget
                     page={page}
-                    navigateToPage={navigateToPage}
                   />
                 </Grid>
               );

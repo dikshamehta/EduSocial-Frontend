@@ -63,7 +63,7 @@ const NavBar = () => {
         let searchResults = {
             'posts': searchData.posts,
             'people': searchData.users,
-            'pages': []
+            'pages': searchData.pages
         };
         console.log(searchResults);
         dispatch(setSearchResults(searchResults));
