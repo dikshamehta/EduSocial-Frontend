@@ -65,9 +65,11 @@ const SearchResults = () => {
 
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
     const postSortOptions = ["Latest", "Oldest", "Relevance"];
+    const pageSortOptions = ["Latest", "Oldest", "Relevance"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
     const [postSortValue, setPostSortValue] = useState(postSortOptions[0]);
-    // TODO: the default peopleSortValue must match the actual order in the people list when no sort option 
+    const [pageSortValue, setPageSortValue] = useState(pageSortOptions[0]);
+    // TODO: the default peopleSortValue must match the actual order in the people list when no sort option
     // is selected by user.
 
     function countRelevance(friendIds){
@@ -83,11 +85,11 @@ const SearchResults = () => {
         setPeopleSortValue(event.target.value);
         console.log(event.target.value);
         let updatedSearchResults = structuredClone(searchResults);
-        if(event.target.value == peopleSortOptions[0]) {
+        if(event.target.value === peopleSortOptions[0]) {
             updatedSearchResults.people.sort(
                 (a, b) => a.firstName.localeCompare(b.firstName)
             );
-        } else if (event.target.value == peopleSortOptions[1]) {
+        } else if (event.target.value === peopleSortOptions[1]) {
             updatedSearchResults.people.sort(
                 (a, b) => b.firstName.localeCompare(a.firstName)
             );
@@ -103,11 +105,11 @@ const SearchResults = () => {
         setPostSortValue(event.target.value);
         console.log(event.target.value);
         let updatedSearchResults = structuredClone(searchResults);
-        if(event.target.value == postSortOptions[0]) {
+        if(event.target.value === postSortOptions[0]) {
             updatedSearchResults.posts.sort(
                 (a, b) => a.createdAt < b.createdAt ? -1:1
             )
-        } else if (event.target.value == postSortOptions[1]) {
+        } else if (event.target.value === postSortOptions[1]) {
             updatedSearchResults.posts.sort(
                 (a, b) => b.createdAt < a.createdAt ? -1:1
             )
@@ -115,13 +117,41 @@ const SearchResults = () => {
             let relevantPosts = []
             let remainingPosts = []
             updatedSearchResults.posts.forEach((post) => {
-                if(post.displayTag == loggedInUser.displayTag) {
+                if(post.displayTag === loggedInUser.displayTag) {
                     relevantPosts.push(post);
                 } else {
                     remainingPosts.push(post);
                 }
             });
             updatedSearchResults.posts = relevantPosts.concat(remainingPosts);
+        }
+        dispatch(setSearchResults(updatedSearchResults));
+    };
+
+    const handlePageSortChange = (event) => {
+        setPageSortValue(event.target.value);
+        console.log(event.target.value);
+        let updatedSearchResults = structuredClone(searchResults);
+        if(event.target.value === pageSortOptions[0]) {
+            updatedSearchResults.pages.sort(
+                (a, b) => a.updatedAt < b.updatedAt ? -1:1
+            )
+        } else if (event.target.value === pageSortOptions[1]) {
+            updatedSearchResults.pages.sort(
+                (a, b) => b.updatedAt < a.updatedAt ? -1:1
+            )
+        } else {
+            // TODO: Implement this
+            // let relevantPages = []
+            // let remainingPages = []
+            // updatedSearchResults.posts.forEach((page) => {
+            //     if(page.displayTag == loggedInUser.displayTag) {
+            //         relevantPosts.push(post);
+            //     } else {
+            //         remainingPosts.push(post);
+            //     }
+            // });
+            // updatedSearchResults.posts = relevantPosts.concat(remainingPosts);
         }
         dispatch(setSearchResults(updatedSearchResults));
     };
@@ -224,6 +254,10 @@ const SearchResults = () => {
             >
                 Pages
             </Typography>
+            <SortingOptions
+                sortValue = {pageSortValue}
+                sortOptions={pageSortOptions}
+                onSortChange={handlePageSortChange}/>
         </WidgetWrapper>
         <Divider/>
         {searchResults.pages.map(pages_mapping)}
