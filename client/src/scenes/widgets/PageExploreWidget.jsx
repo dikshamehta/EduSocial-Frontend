@@ -106,7 +106,7 @@ const PageExploreWidget = ({ page }) => {
           <Button
             variant="outlined"
             color="primary"
-            onClick={async () => await joinPage().then(navigate(page._id))}
+            onClick={async () => await joinPage().then(navigate(`/page/${page._id}`))}
             sx={{ mt: "15px", zIndex: 9999 }}
           >
             {"Join Page"}
