@@ -6,7 +6,7 @@ import { setFriends, setFriendRequests } from "state";
 import FlexBetween from "components/FlexBetween";
 import UserImage from "./UserImage";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
     const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Friend = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
 
     const patchFriend = async () => { //API call for adding/removing friend
         const response = await fetch(
-            `http://localhost:${serverPort}/user/${_id}/${friendId}`,
+            `${serverURL}/user/${_id}/${friendId}`,
             {
               method: "PATCH",
               headers: {

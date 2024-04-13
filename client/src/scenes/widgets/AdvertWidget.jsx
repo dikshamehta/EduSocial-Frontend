@@ -3,8 +3,8 @@ import FlexBetween from 'components/FlexBetween';
 import WidgetWrapper from 'components/WidgetWrapper';
 import { useNavigate } from 'react-router-dom/dist';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
-const img_url = `http://localhost:${serverPort}/assets/patek-philippe-banner.png`;
+const serverURL = process.env.REACT_APP_SERVER_URL;
+const img_url = `${serverURL}/assets/patek-philippe-banner.png`;
 
 const AdvertWidget = () => {
     const { palette } = useTheme();

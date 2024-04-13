@@ -12,7 +12,7 @@ import { useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import pageTypes from "components/PageTypes";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 const PageExplorePage = () => {
   const [pages, setPages] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -24,7 +24,7 @@ const PageExplorePage = () => {
 
   const getAllPages = async () => {
     try {
-      const response = await fetch(`http://localhost:${serverPort}/page`, {
+      const response = await fetch(`${serverURL}/page`, {
         method: "GET",
       });
       const data = await response.json();

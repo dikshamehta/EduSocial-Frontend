@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFriends, setRecommendedFriends } from 'state';
 
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const RecommendedFriendsList = ({ userId }) => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const RecommendedFriendsList = ({ userId }) => {
 
 
     const getFriends = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}/friends`, {
+        const response = await fetch(`${serverURL}/user/${userId}/friends`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -33,10 +33,11 @@ const RecommendedFriendsList = ({ userId }) => {
     const getRecommendedFriends = async () => {
         //Loop through friends array
         //Display friends of friends
+        /*
         let tempRecommendedFriends = [];
         for (let i = 0; i < friends.length; i++) {
             let friendId = friends[i]._id;
-            const response = await fetch(`http://localhost:${serverPort}/user/${friendId}/friends`, {
+            const response = await fetch(`${serverURL}/user/${friendId}/friends`, {
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -48,7 +49,7 @@ const RecommendedFriendsList = ({ userId }) => {
             }
         }
 
-        console.log("Temp Recommended Friends: ", tempRecommendedFriends);
+        //console.log("Temp Recommended Friends: ", tempRecommendedFriends);
 
         let counter = 0;
         let randomizedRecommendedFriends = [];
@@ -65,6 +66,7 @@ const RecommendedFriendsList = ({ userId }) => {
 
         // console.log("Recommended Friends: ", recommendedFriends);
         dispatch(setRecommendedFriends({ recommendedFriends: randomizedRecommendedFriends }));
+        */
     };
 
     

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PageImage = ({ image, size="125px" }) => {
     return (
@@ -10,7 +10,7 @@ const PageImage = ({ image, size="125px" }) => {
                 width={size}
                 height={size}
                 alt="page"
-                src={`http://localhost:${serverPort}/assets/${image}`}
+                src={`${serverURL}/assets/${image}`}
             />
         </Box>
     );

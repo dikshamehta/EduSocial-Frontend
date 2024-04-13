@@ -24,7 +24,7 @@ import { Search } from '@mui/icons-material';
 import { setBlockedUsers } from 'state';
 import BlockedUserListWidget from '..//widgets/BlockedUserListWidget';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const initialValuesRegister = {
     blockedUsers: [],
@@ -61,7 +61,7 @@ const BlockedForm = () => {
     const navigateToHomePage = () => navigate("/home");
 
     const getUser = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, { //API call
+        const response = await fetch(`${serverURL}/user/${userId}`, { //API call
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -81,7 +81,7 @@ const BlockedForm = () => {
     } = user;
 
     const blockUser = async (blockedUserId) => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}/${blockedUserId}/block`, {
+        const response = await fetch(`${serverURL}/user/${userId}/${blockedUserId}/block`, {
             method: "PATCH",
             headers: { Authorization: `Bearer ${token}` },
         });

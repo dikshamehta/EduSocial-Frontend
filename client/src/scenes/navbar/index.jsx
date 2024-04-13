@@ -46,10 +46,10 @@ const NavBar = () => {
 
     const fullName = `${user.firstName} ${user.lastName}`; //Access to full name!
     // const fullName = `first last`; //Test
-    const serverPort = process.env.REACT_APP_SERVER_PORT;
+    const serverURL = process.env.REACT_APP_SERVER_URL;
 
     const getSearchResults = async (query) => {
-        const response = await fetch(`http://localhost:${serverPort}/search/`, {
+        const response = await fetch(`${serverURL}/search/`, {
             method: "POST",
             headers: {
                 'Authorization': `Bearer ${token}`,

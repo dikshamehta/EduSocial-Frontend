@@ -7,7 +7,7 @@ import { setFriends } from 'state';
 import BlockedUser from 'components/BlockedUser';
 import { setBlockedUsers } from 'state';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const BlockedUserListWidget = ({ userId }) => {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const BlockedUserListWidget = ({ userId }) => {
 
 
     const getBlockedUsers = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}/blockedUsers`, {
+        const response = await fetch(`${serverURL}/user/${userId}/blockedUsers`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });

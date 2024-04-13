@@ -4,7 +4,7 @@ import WidgetWrapper from 'components/WidgetWrapper';
 import { useSelector } from 'react-redux';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PollWidget = ({ parentId }) => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -19,7 +19,7 @@ const PollWidget = ({ parentId }) => {
     };
 
     const handleSubmit = async () => {
-        await fetch(`http://localhost:${serverPort}/polls/${parentId}`, {
+        await fetch(`${serverURL}/polls/${parentId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const PollWidget = ({ parentId }) => {
 
     const getPollData = async () => {
         try {
-            const response = await fetch(`http://localhost:${serverPort}/polls/${parentId}`, {
+            const response = await fetch(`${serverURL}/polls/${parentId}`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${token}` }
             });

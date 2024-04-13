@@ -7,7 +7,7 @@ import UserWidget from "./UserWidget";
 import {useState} from "react";
 import SearchFilter from "../../components/SearchFilter";
 
-// const serverPort = process.env.REACT_APP_SERVER_PORT;
+// const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const SearchWidget = () => {
     const dispatch = useDispatch();

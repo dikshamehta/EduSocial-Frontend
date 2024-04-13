@@ -22,8 +22,6 @@ import styled from "styled-components";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef } from "react";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
-
 const registerSchema = yup.object().shape({ //Registration validation schema
     username: yup.string().required("Username is required"),
     firstName: yup.string().required("First name is required"),
@@ -83,17 +81,10 @@ ${({ active }) =>
 `}
 `;
 
-//Use pereventDefault for Tab
-// Tab.defaultProps = {
-//   onClick: (e) => e.preventDefault(),
-// };
-
 
 const types = ["Default", "Business", "Technology", "Humor", "John Cena"];
 
-
-
-
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const Form = () => {
     const [pageType, setPageType] = useState("login"); //Default page type is login - display different form based on state
@@ -136,7 +127,7 @@ const Form = () => {
               // Now send the token to your backend for verification and processing at the updated endpoint
               console.log("Sending data to backend");
               const response = await fetch(
-                `http://localhost:${serverPort}/auth/google-login`,
+                `${serverURL}/auth/google-login`,
                 {
                   method: "POST",
                   headers: {
@@ -202,7 +193,7 @@ const Form = () => {
 
         const savedUserResponse = await fetch(
           //Sending form data to this API call
-          `http://localhost:${serverPort}/auth/register`,
+          `${serverURL}/auth/register`,
           {
             method: "POST",
             body: formData,
@@ -225,7 +216,7 @@ const Form = () => {
         alert("Captcha verification failed. Please try again.");
       } else {
         const loggedInResponse = await fetch(
-          `http://localhost:${serverPort}/auth/login`,
+          `${serverURL}/auth/login`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -251,7 +242,7 @@ const Form = () => {
 
       if (captchaValue) {
         const response = await fetch(
-          `http://localhost:${serverPort}/auth/captcha`,
+          `${serverURL}/auth/captcha`,
           {
             method: "POST",
             body: JSON.stringify({ token: captchaValue }),

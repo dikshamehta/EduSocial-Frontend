@@ -31,7 +31,7 @@ import { useSelector } from 'react-redux';
 //     picture: yup.string().required("Ad picture is required"),
 // });
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const initialValuesRegister = {
     profilePrivacy: false,
@@ -78,7 +78,7 @@ const SettingsForm = () => {
     }
 
     const getUser = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, { //API call
+        const response = await fetch(`${serverURL}/user/${userId}`, { //API call
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -131,7 +131,7 @@ const SettingsForm = () => {
         // console.log(JSON.stringify(data));
 
         const savedSettingsResponse = await fetch(
-            `http://localhost:${serverPort}/user/${_id}/changeSettings`,
+            `${serverURL}/user/${_id}/changeSettings`,
             {
                 method: "PUT",
                 body: JSON.stringify(data),

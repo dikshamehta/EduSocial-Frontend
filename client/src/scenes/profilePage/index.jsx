@@ -10,7 +10,7 @@ import UserWidget from 'scenes/widgets/UserWidget';
 import Friend from 'components/Friend';
 import WidgetWrapper from 'components/WidgetWrapper';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -20,7 +20,7 @@ const ProfilePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   
     const getUser = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, {
+        const response = await fetch(`${serverURL}/user/${userId}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });

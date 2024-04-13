@@ -53,7 +53,7 @@ const Tab = styled.button`
 
 const types = ["Business", "Technology", "Humor", "John Cena"];
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 const MyPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
     const [ isImage, setIsImage ] = useState(false); //Represent the switch whether someone has clicked image button
@@ -113,7 +113,7 @@ const MyPostWidget = ({ picturePath }) => {
             formData.append("pollData", JSON.stringify(pollData));
         }
 
-        const response = await fetch(`http://localhost:${serverPort}/posts`, {
+        const response = await fetch(`${serverURL}/posts`, {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
             body: formData,
@@ -136,260 +136,260 @@ const MyPostWidget = ({ picturePath }) => {
     };
 
     return (
-        <WidgetWrapper width="650px">
-            <FlexBetween gap="1.5rem">
-                <UserImage image={picturePath} />
-                <InputBase 
-                    placeholder="How are you feeling?"
-                    onChange={(e) => setPost(e.target.value)}
-                    value={post}
-                    sx={{
-                        width: "100%",
-                        backgroundColor: palette.neutral.light,
-                        borderRadius: "2rem",
-                        padding: "1rem 2rem",
-                    }}
-                />
-            </FlexBetween>
-            {isImage && (
-                <Box
-                    border={`1px solid ${medium}`}
-                    borderRadius="5px"
-                    mt="1rem"
+      <WidgetWrapper width="650px">
+        <FlexBetween gap="1.5rem">
+          <UserImage image={picturePath} />
+          <InputBase
+            placeholder="How are you feeling?"
+            onChange={(e) => setPost(e.target.value)}
+            value={post}
+            sx={{
+              width: "100%",
+              backgroundColor: palette.neutral.light,
+              borderRadius: "2rem",
+              padding: "1rem 2rem",
+            }}
+          />
+        </FlexBetween>
+        {isImage && (
+          <Box
+            border={`1px solid ${medium}`}
+            borderRadius="5px"
+            mt="1rem"
+            p="1rem"
+          >
+            <Dropzone
+              acceptedFiles=".jpg,.jpeg,.png"
+              multiple={false}
+              onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <FlexBetween>
+                  <Box
+                    {...getRootProps()}
+                    border={`2px dashed ${palette.primary.main}`}
                     p="1rem"
-                >
-                    <Dropzone
-                        acceptedFiles=".jpg,.jpeg,.png"
-                        multiple={false}
-                        onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
+                    width="100%"
+                    sx={{ "&:hover": { cursor: "pointer" } }}
+                  >
+                    <input {...getInputProps()} />
+                    {!image ? (
+                      <p>Add Image Here (.jpg, .jpeg, .png)</p>
+                    ) : (
+                      <FlexBetween>
+                        <Typography>{image.name}</Typography>
+                        <EditOutlined />
+                      </FlexBetween>
+                    )}
+                  </Box>
+                  {image && (
+                    <IconButton
+                      onClick={() => setImage(null)}
+                      sx={{ width: "15%" }}
                     >
-                        {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
-                                <Box
-                                    {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.main}`}
-                                    p="1rem"
-                                    width="100%"
-                                    sx={{ "&:hover": { cursor: "pointer" } }}
-                                >
-                                    <input {...getInputProps()} />
-                                    {!image ? (
-                                        <p>Add Image Here (.jpg, .jpeg, .png)</p>
-                                    ) : (
-                                        <FlexBetween>
-                                            <Typography>{image.name}</Typography>
-                                            <EditOutlined />
-                                        </FlexBetween>
-                                    )}
-                                </Box>
-                                {image && (
-                                    <IconButton
-                                        onClick={() => setImage(null)}
-                                        sx={{ width: "15%" }}
-                                    >
-                                        <DeleteOutlined />
-                                    </IconButton>
-                                )}
-                            </FlexBetween>
-                        )}
-                    </Dropzone>
-                </Box>
-            )}
+                      <DeleteOutlined />
+                    </IconButton>
+                  )}
+                </FlexBetween>
+              )}
+            </Dropzone>
+          </Box>
+        )}
 
-            {isVideo && (
-                <Box
-                    border={`1px solid ${medium}`}
-                    borderRadius="5px"
-                    mt="1rem"
+        {isVideo && (
+          <Box
+            border={`1px solid ${medium}`}
+            borderRadius="5px"
+            mt="1rem"
+            p="1rem"
+          >
+            <Dropzone
+              acceptedFiles=".mov,.mp4"
+              multiple={false}
+              onDrop={(acceptedFiles) => setVideo(acceptedFiles[0])}
+            >
+              {({ getRootProps, getInputProps }) => (
+                <FlexBetween>
+                  <Box
+                    {...getRootProps()}
+                    border={`2px dashed ${palette.primary.main}`}
                     p="1rem"
-                >
-                    <Dropzone
-                        acceptedFiles=".mov,.mp4"
-                        multiple={false}
-                        onDrop={(acceptedFiles) => setVideo(acceptedFiles[0])}
+                    width="100%"
+                    sx={{ "&:hover": { cursor: "pointer" } }}
+                  >
+                    <input {...getInputProps()} />
+                    {!video ? (
+                      <p>Add Video Here (.mov, .mp4)</p>
+                    ) : (
+                      <FlexBetween>
+                        <Typography>{video.name}</Typography>
+                        <EditOutlined />
+                      </FlexBetween>
+                    )}
+                  </Box>
+                  {video && (
+                    <IconButton
+                      onClick={() => setVideo(null)}
+                      sx={{ width: "15%" }}
                     >
-                        {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
-                                <Box
-                                    {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.main}`}
-                                    p="1rem"
-                                    width="100%"
-                                    sx={{ "&:hover": { cursor: "pointer" } }}
-                                >
-                                    <input {...getInputProps()} />
-                                    {!video ? (
-                                        <p>Add Video Here (.mov, .mp4)</p>
-                                    ) : (
-                                        <FlexBetween>
-                                            <Typography>{video.name}</Typography>
-                                            <EditOutlined />
-                                        </FlexBetween>
-                                    )}
-                                </Box>
-                                {video && (
-                                    <IconButton
-                                        onClick={() => setVideo(null)}
-                                        sx={{ width: "15%" }}
-                                    >
-                                        <DeleteOutlined />
-                                    </IconButton>
-                                )}
-                            </FlexBetween>
-                        )}
-                    </Dropzone>
-                </Box>
-            )}
+                      <DeleteOutlined />
+                    </IconButton>
+                  )}
+                </FlexBetween>
+              )}
+            </Dropzone>
+          </Box>
+        )}
 
-            {isPoll && (
-                <Box
-                    border={`1px solid ${medium}`}
-                    borderRadius="5px"
-                    mt="1rem"
-                    p="1rem"
-                >
-                    <PollForm getFormData={handleGetPollData} />
-                </Box>
-            )}
+        {isPoll && (
+          <Box
+            border={`1px solid ${medium}`}
+            borderRadius="5px"
+            mt="1rem"
+            p="1rem"
+          >
+            <PollForm getFormData={handleGetPollData} />
+          </Box>
+        )}
 
-            <Divider sx={{ margin: "1.25rem 0" }} />
+        <Divider sx={{ margin: "1.25rem 0" }} />
 
-            <FlexBetween>
-                <FlexBetween gap="0.25rem" onClick={() => {
+        <FlexBetween>
+          <FlexBetween
+            gap="0.25rem"
+            onClick={() => {
+              setIsImage(!isImage);
+              setImage(null);
+              if (isVideo) {
+                setIsVideo(!isVideo);
+                setVideo(null);
+              }
+              if (isPoll) {
+                setIsPoll(!isPoll);
+                setPoll(null);
+              }
+            }}
+          >
+            <ImageOutlined sx={{ color: mediumMain }} />
+            <Typography
+              color={mediumMain}
+              sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+            >
+              Image
+            </Typography>
+          </FlexBetween>
+
+          {isNonMobileScreens ? (
+            <>
+              <FlexBetween
+                gap="0.25rem"
+                onClick={() => {
+                  setIsVideo(!isVideo);
+                  setVideo(null);
+                  if (isImage) {
                     setIsImage(!isImage);
                     setImage(null);
-                    if (isVideo) {
-                        setIsVideo(!isVideo);
-                        setVideo(null);
-                    }
-                    if (isPoll) {
-                        setIsPoll(!isPoll);
-                        setPoll(null);
-                    }
-                }}>
-                    <ImageOutlined sx={{ color: mediumMain }} />
-                    <Typography
-                        color={mediumMain}
-                        sx={{ "&:hover": { cursor: "pointer", color: medium } }}
-                    >
-                        Image
-                    </Typography>
-                </FlexBetween>
+                  }
+                  if (isPoll) {
+                    setIsPoll(!isPoll);
+                    setPoll(null);
+                  }
+                }}
+              >
+                <GifBoxOutlined sx={{ color: mediumMain }} />
+                <Typography
+                  color={mediumMain}
+                  sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+                >
+                  Clip
+                </Typography>
+              </FlexBetween>
 
-                {isNonMobileScreens ? (
-                    <>
-                        <FlexBetween gap="0.25rem" onClick={() => {
-                            setIsVideo(!isVideo);
-                            setVideo(null);
-                            if (isImage) {
-                                setIsImage(!isImage);
-                                setImage(null);
-                            }
-                            if (isPoll) {
-                                setIsPoll(!isPoll);
-                                setPoll(null);
-                            }
-                        }}>
-                            <GifBoxOutlined sx={{ color: mediumMain }} />
-                            <Typography 
-                                color={mediumMain}
-                                sx={{ "&:hover": { cursor: "pointer", color: medium } }}
-                            >
-                                Clip
-                            </Typography>
-                        </FlexBetween>
+              <FlexBetween
+                gap="0.25rem"
+                onClick={() => {
+                  setIsPoll(!isPoll);
+                  setPoll(null);
+                  if (isImage) {
+                    setIsImage(!isImage);
+                    setImage(null);
+                  }
+                  if (isVideo) {
+                    setIsVideo(!isVideo);
+                    setVideo(null);
+                  }
+                }}
+              >
+                <PollIcon sx={{ color: mediumMain }} />
+                <Typography
+                  color={mediumMain}
+                  sx={{ "&:hover": { cursor: "pointer", color: medium } }}
+                >
+                  Poll
+                </Typography>
+              </FlexBetween>
 
-                        <FlexBetween gap="0.25rem" onClick={() => {
-                            setIsPoll(!isPoll);
-                            setPoll(null);
-                            if (isImage) {
-                                setIsImage(!isImage);
-                                setImage(null);
-                            }
-                            if (isVideo) {
-                                setIsVideo(!isVideo);
-                                setVideo(null);
-                            }
-                        }}>
-                            <PollIcon sx={{ color: mediumMain }} />
-                            <Typography 
-                                color={mediumMain}
-                                sx={{ "&:hover": { cursor: "pointer", color: medium } }}
-                            >
-                                Poll
-                            </Typography>
-                        </FlexBetween>
-
-                        {/* <FlexBetween gap="0.25rem">
+              {/* <FlexBetween gap="0.25rem">
                             <MicOutlined sx={{ color: mediumMain }} />
                             <Typography color={mediumMain}>Audio</Typography>
                         </FlexBetween> */}
-                    </>
-                ) : (
-                    <FlexBetween gap="0.25rem">
-                        <MoreHorizOutlined sx={{ color: mediumMain }} />
-                    </FlexBetween>
-                )}
+            </>
+          ) : (
+            <FlexBetween gap="0.25rem">
+              <MoreHorizOutlined sx={{ color: mediumMain }} />
+            </FlexBetween>
+          )}
 
-                <Button
-                    disabled={!post}
-                    onClick={handlePost}
-                    sx={{
-                        color: palette.background.alt,
-                        backgroundColor: "#3CA535",
-                        borderRadius: "3rem",
-                    }}
+          <Button
+            disabled={!post}
+            onClick={handlePost}
+            sx={{
+              color: palette.background.alt,
+              backgroundColor: "#3CA535",
+              borderRadius: "3rem",
+            }}
+          >
+            Post
+          </Button>
+        </FlexBetween>
+        <Divider sx={{ margin: "1.25rem 0" }} />
+        <FlexBetween>
+          <Typography
+            color={mediumMain}
+            // display="flex"
+            // gap="0.5rem"
+            // mt="1rem"
+          >
+            Want to add a tag? Choose an option:
+          </Typography>
+        </FlexBetween>
+        <Divider sx={{ margin: "0.5rem 0", border: "none" }} />
+
+        <FlexBetween
+          alignContent={"center"}
+          justifyContent={"center"}
+          ml="4.3rem"
+        >
+          <>
+            <div>
+              {types.map((type) => (
+                <Tab
+                  key={type}
+                  active={active === type ? 1 : 0}
+                  onClick={() => {
+                    setActive(type);
+                    console.log(type);
+                    setDisplayTag(String(type));
+                  }}
                 >
-                    Post
-                </Button>
-            </FlexBetween>
-            <Divider sx={{ margin: "1.25rem 0" }} />
-            <FlexBetween
-            >
-                <Typography 
-                    color={mediumMain}
-                    // display="flex"
-                    // gap="0.5rem"
-                    // mt="1rem"
-                    
-                    
-                >
-                    Want to add a tag? Choose an option:
-                </Typography>
-                
-
-                
-
-            </FlexBetween>
-            <Divider sx={{ margin: "0.5rem 0" ,border:"none" }} />
-
-            <FlexBetween 
-                alignContent={"center"}
-                justifyContent={"center"}
-                ml="4.3rem"
-            >
-                <>
-                    <div>
-                        {types.map((type) => (
-                            <Tab
-                                key={type}
-                                active={active === type}
-                                onClick={() => {
-                                    setActive(type);
-                                    setDisplayTag(String (type));
-                                }}
-                                >
-                                {type}
-                            </Tab>
-                        ))}
-                    </div>
-                    <p />
-                </>
-
-            </FlexBetween>
-
-            
-        </WidgetWrapper>
+                  {type}
+                </Tab>
+              ))}
+            </div>
+            <p />
+          </>
+        </FlexBetween>
+      </WidgetWrapper>
     );
 };
 
