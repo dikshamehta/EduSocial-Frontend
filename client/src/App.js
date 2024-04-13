@@ -16,7 +16,6 @@ import PageCreationPage from "./scenes/pageCreationPage";
 import PagePage from "./scenes/pagePage";
 import PageSettingsPage from "./scenes/pageSettingsPage";
 
-
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); //Sets up theme
