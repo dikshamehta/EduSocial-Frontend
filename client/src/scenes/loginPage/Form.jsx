@@ -7,6 +7,7 @@ import {
     useMediaQuery,
     Typography,
     useTheme,
+    Divider,
 } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { Formik } from 'formik';
@@ -436,7 +437,9 @@ const Form = () => {
 
             {/* Buttons */}
             <Box>
-              <Box sx={{ display: "flex", justifyContent: "center", mt: "2rem" }}>
+              <Box
+                sx={{ display: "flex", justifyContent: "center", mt: "2rem" }}
+              >
                 <ReCAPTCHA
                   ref={recaptcha}
                   sitekey={process.env.REACT_APP_SITE_KEY}
@@ -446,7 +449,7 @@ const Form = () => {
                 fullWidth
                 type="submit"
                 sx={{
-                  m: "2rem 0",
+                  mt: "2rem",
                   p: "1rem",
                   backgroundColor: "#3CA535",
                   color: palette.background.alt,
@@ -459,7 +462,8 @@ const Form = () => {
                 fullWidth
                 // type="submit"
                 sx={{
-                  m: "2rem 0",
+                  mt: "1rem",
+                  mb: "1rem",
                   p: "1rem",
                   backgroundColor: "#3CA535",
                   color: palette.background.alt,
@@ -471,25 +475,45 @@ const Form = () => {
                   ? "LOGIN / Sign in with GOOGLE"
                   : "REGISTER with GOOGLE"}
               </Button>
-              <Typography
-                onClick={() => {
-                  setPageType(isLogin ? "register" : "login");
-                  resetForm();
-                  refreshCaptcha();
-                }}
-                sx={{
-                  textDecoration: "underline",
-                  color: "#3CA535",
-                  "&:hover": {
-                    cursor: "pointer",
-                    color: "#B9F0B8",
-                  },
-                }}
-              >
-                {isLogin
-                  ? "New? Register here"
-                  : "Already have an account? Login here."}
-              </Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Typography
+                  onClick={() => {
+                    setPageType(isLogin ? "register" : "login");
+                    resetForm();
+                    refreshCaptcha();
+                  }}
+                  sx={{
+                    textDecoration: "underline",
+                    color: "#3CA535",
+                    "&:hover": {
+                      cursor: "pointer",
+                      color: "#B9F0B8",
+                    },
+                  }}
+                >
+                  {isLogin
+                    ? "New? Register here"
+                    : "Already have an account? Login here."}
+                </Typography>
+                {isLogin && <Divider orientation="vertical" flexItem sx={{m: "0 1rem 0 1rem"}} />}
+                {isLogin && (
+                  <Typography
+                    onClick={() => {
+                      navigate("/forgot-password");
+                    }}
+                    sx={{
+                      textDecoration: "underline",
+                      color: "#3CA535",
+                      "&:hover": {
+                        cursor: "pointer",
+                        color: "#B9F0B8",
+                      },
+                    }}
+                  >
+                    {"Forgot Password?"}
+                  </Typography>
+                )}
+              </Box>
             </Box>
           </form>
         )}
