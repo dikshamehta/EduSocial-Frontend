@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 
 const PageExploreWidget = ({ page }) => {
@@ -21,7 +21,7 @@ const PageExploreWidget = ({ page }) => {
 
   const joinPage = async () => {
     try {
-      await fetch(`http://localhost:${serverPort}/user/${_id}/joinPage/${page._id}`, {
+      await fetch(`${serverURL}/user/${_id}/joinPage/${page._id}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });

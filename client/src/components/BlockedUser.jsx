@@ -9,7 +9,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { setBlockedUsers } from "state";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const BlockedUser = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const BlockedUser = ({ friendId, name, /*subtitle,*/ userPicturePath }) => {
 
     const unblockUser = async () => {
         const response = await fetch(
-            `http://localhost:${serverPort}/user/${_id}/${friendId}/unblock`,
+            `${serverURL}/user/${_id}/${friendId}/unblock`,
             {
               method: "PUT",
               headers: {

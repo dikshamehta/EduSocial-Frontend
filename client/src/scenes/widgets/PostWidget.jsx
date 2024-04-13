@@ -16,7 +16,7 @@ import { TwitterShareButton, XIcon } from 'react-share';
 //import XIcon from '@mui/icons-material/X';
 import PollWidget from "./PollWidget";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PostWidget = ({
     postId,
@@ -61,7 +61,7 @@ const PostWidget = ({
     const primary = palette.primary.main;
   
     const patchLike = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/posts/${postId}/like`, {
+        const response = await fetch(`${serverURL}/posts/${postId}/like`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ const PostWidget = ({
 
     const handleComment = async () => {
         let comment = document.getElementById("commentToAdd").value;
-        const response = await fetch(`http://localhost:${serverPort}/posts/${postId}/comment`, {
+        const response = await fetch(`${serverURL}/posts/${postId}/comment`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -90,133 +90,120 @@ const PostWidget = ({
     const types = ["Cash", "Credit Card", "Bitcoin"];
   
     return (
-        <WidgetWrapper m="2rem 0" width="650px">
-            <Friend
-                friendId={postUserId}
-                name={name}
-                //subtitle={location}
-                userPicturePath={userPicturePath}
-            />
-            <Typography color={main} sx={{ mt: "1rem" }}>
-                {description}
-            </Typography>
-            {picturePath && (
-                <img
-                    width="100%"
-                    height="auto"
-                    alt="post"
-                    style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-                    src={`http://localhost:${serverPort}/assets/${picturePath}`}
-                />
-            )}
-            {videoPath && (
-                <video
-                    width="100%"
-                    height="auto"
-                    controls
-                    style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-                >
-                    <source src={`http://localhost:${serverPort}/assets/${videoPath}`} />
-                </video>
-            )}
-            {pollData && (
-                <PollWidget thisPollData={pollData} parentId={postId} />
-            )}
-            <FlexBetween mt="0.25rem">
-                <FlexBetween gap="1rem">
-                    <FlexBetween gap="0.3rem">
-                        <IconButton onClick={patchLike}> {/* Determines whether one has liked or not */}
-                            {isLiked ? (
-                                <FavoriteOutlined sx={{ color: primary }} />
-                            ) : (
-                                <FavoriteBorderOutlined />
-                            )}
-                        </IconButton>
-                        <Typography>{likeCount}</Typography>
-                    </FlexBetween>
-  
-                    <FlexBetween gap="0.3rem"> {/* Comments */}
-                        <IconButton onClick={() => setIsComments(!isComments)}>
-                            <ChatBubbleOutlineOutlined />
-                        </IconButton>
-                        <Typography>{comments.length}</Typography>
-                    </FlexBetween>
-                </FlexBetween>
-
-                <FlexBetween gap="0.25rem">
-                    <IconButton>
-                        
-
-                    </IconButton>
-                        <FacebookShareButton
-                            url={'https://developers.facebook.com/'}
-                        >
-                            <FacebookIcon size={25} round/>
-                        </FacebookShareButton>
-                    <IconButton>
-                        <TwitterShareButton
-                            url={'https://developers.facebook.com/'}
-                        >
-                            <XIcon size={25} round />
-                        </TwitterShareButton >
-                    </IconButton>
-                    
-                </FlexBetween>
-  
+      <WidgetWrapper m="2rem 0" width="650px">
+        <Friend
+          friendId={postUserId}
+          name={name}
+          //subtitle={location}
+          userPicturePath={userPicturePath}
+        />
+        <Typography color={main} sx={{ mt: "1rem" }}>
+          {description}
+        </Typography>
+        {picturePath && (
+          <img
+            width="100%"
+            height="auto"
+            alt="post"
+            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+            src={`${serverURL}/assets/${picturePath}`}
+          />
+        )}
+        {videoPath && (
+          <video
+            width="100%"
+            height="auto"
+            controls
+            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+          >
+            <source src={`${serverURL}/assets/${videoPath}`} />
+          </video>
+        )}
+        {pollData && <PollWidget thisPollData={pollData} parentId={postId} />}
+        <FlexBetween mt="0.25rem">
+          <FlexBetween gap="1rem">
+            <FlexBetween gap="0.3rem">
+              <IconButton onClick={patchLike}>
+                {" "}
+                {/* Determines whether one has liked or not */}
+                {isLiked ? (
+                  <FavoriteOutlined sx={{ color: primary }} />
+                ) : (
+                  <FavoriteBorderOutlined />
+                )}
+              </IconButton>
+              <Typography>{likeCount}</Typography>
             </FlexBetween>
-            {isComments && ( //If comments are present, display them
-                <Box mt="0.5rem">
-                    <InputBase 
-                        placeholder="Add a comment"
-                        // onChange={(e) => setPost(e.target.value)}
-                        // value={post}
-                        id="commentToAdd"
-                        sx={{
-                            width: "93%",
-                            
-                            // m : "0",
-                            // width: "100px",
-                            // resize: "none",
-                            backgroundColor: palette.neutral.light,
-                            borderRadius: "2rem",
-                            padding: "0.5rem 1rem",
-                        }}
-                    />
-                    <IconButton onClick={handleComment}>
-                        <SendIcon />
-                    </IconButton>
 
-                    {/*Display the comments */}
-                    <Box display="flex" flexDirection="column" gap="0.5rem">
-                        {comments.map((comment, index) => (
-                            <FlexBetween gap="0.5rem">
-                                <Box key={index} mt="0.5rem">
-                                    <UserImage image={comment.userPicturePath} size="55px" />
-                                </Box>
-                                <Box key={index} mt="0.5rem">
-                                    <Typography color={main} sx={{ mt: "0.25rem", mr: "29rem"}} fontWeight="500" variant="h5">
-                                        {comment.userUsername}
-                                    </Typography>
-                                    <Typography color={main} sx={{ mt: "0.25rem"}}>
-                                        {comment.comment}
-                                    </Typography>
-                                </Box>
-                            </FlexBetween>
+            <FlexBetween gap="0.3rem">
+              {" "}
+              {/* Comments */}
+              <IconButton onClick={() => setIsComments(!isComments)}>
+                <ChatBubbleOutlineOutlined />
+              </IconButton>
+              <Typography>{comments.length}</Typography>
+            </FlexBetween>
+          </FlexBetween>
 
+          <FlexBetween gap="0.25rem">
+            <FacebookShareButton url={"https://developers.facebook.com/"}>
+              <FacebookIcon size={25} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={"https://developers.facebook.com/"}>
+              <XIcon size={25} round />
+            </TwitterShareButton>
+          </FlexBetween>
+        </FlexBetween>
+        {isComments && ( //If comments are present, display them
+          <Box mt="0.5rem">
+            <InputBase
+              placeholder="Add a comment"
+              // onChange={(e) => setPost(e.target.value)}
+              // value={post}
+              id="commentToAdd"
+              sx={{
+                width: "93%",
 
+                // m : "0",
+                // width: "100px",
+                // resize: "none",
+                backgroundColor: palette.neutral.light,
+                borderRadius: "2rem",
+                padding: "0.5rem 1rem",
+              }}
+            />
+            <IconButton onClick={handleComment}>
+              <SendIcon />
+            </IconButton>
 
-                           
-                        ))}
-                    </Box>
+            {/*Display the comments */}
+            <Box display="flex" flexDirection="column" gap="0.5rem">
+              {comments.map((comment, index) => (
+                <FlexBetween gap="0.5rem">
+                  <Box key={index} mt="0.5rem">
+                    <UserImage image={comment.userPicturePath} size="55px" />
+                  </Box>
+                  <Box key={index} mt="0.5rem">
+                    <Typography
+                      color={main}
+                      sx={{ mt: "0.25rem", mr: "29rem" }}
+                      fontWeight="500"
+                      variant="h5"
+                    >
+                      {comment.userUsername}
+                    </Typography>
+                    <Typography color={main} sx={{ mt: "0.25rem" }}>
+                      {comment.comment}
+                    </Typography>
+                  </Box>
+                </FlexBetween>
+              ))}
+            </Box>
 
-
-                    
-                    
-                    
-                    {/* <Divider padding="0.5rem 0.5rem" /> */}
-                </Box>
-            )}
-        </WidgetWrapper>
+            {/* <Divider padding="0.5rem 0.5rem" /> */}
+          </Box>
+        )}
+      </WidgetWrapper>
     );
 };
   

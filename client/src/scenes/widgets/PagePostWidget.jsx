@@ -12,7 +12,7 @@ import { TwitterShareButton, XIcon } from 'react-share';
 import PollWidget from "./PollWidget";
 import { useEffect } from "react";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PagePostWidget = ({
   postId,
@@ -54,7 +54,7 @@ const PagePostWidget = ({
   }, [likes, loggedInUserId]);
 
   const patchLike = async () => {
-    await fetch(`http://localhost:${serverPort}/pagePost/${postId}/like`, {
+    await fetch(`${serverURL}/pagePost/${postId}/like`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ const PagePostWidget = ({
 
   const handleComment = async () => {
     let comment = document.getElementById("commentToAdd").value;
-    await fetch(`http://localhost:${serverPort}/pagePost/${postId}/comment`, {
+    await fetch(`${serverURL}/pagePost/${postId}/comment`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ const PagePostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={`http://localhost:${serverPort}/assets/${picturePath}`}
+          src={`${serverURL}/assets/${picturePath}`}
         />
       )}
       {videoPath && (
@@ -114,7 +114,7 @@ const PagePostWidget = ({
           controls
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
         >
-          <source src={`http://localhost:${serverPort}/assets/${videoPath}`} />
+          <source src={`${serverURL}/assets/${videoPath}`} />
         </video>
       )}
       {pollData && <PollWidget parentId={postId} />}

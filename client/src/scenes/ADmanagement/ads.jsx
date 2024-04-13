@@ -19,8 +19,7 @@ import FlexBetween from 'components/FlexBetween';
 import { create } from '@mui/material/styles/createTransitions';
 import { useSelector } from 'react-redux';
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
- 
+const serverURL = process.env.REACT_APP_SERVER_URL;
  
 const adSchema = yup.object().shape({ //Registration validation schema
     companyname: yup.string().required("Company name is required"),
@@ -90,7 +89,7 @@ const Adsform = () => {
 
         console.log(formData);
         const savedAdResponse = await fetch(
-            `http://localhost:${serverPort}/ads`,
+            `${serverURL}/ads`,
             {
                 method: "POST",
                 body: formData,

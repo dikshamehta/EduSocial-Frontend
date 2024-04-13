@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import HomePage from 'scenes/homePage';
 import LoginPage from 'scenes/loginPage';
+import ForgotPasswordPage from 'scenes/passwordReset';
 import ProfilePage from 'scenes/profilePage';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -16,7 +17,6 @@ import PageCreationPage from "./scenes/pageCreationPage";
 import PagePage from "./scenes/pagePage";
 import PageSettingsPage from "./scenes/pageSettingsPage";
 
-
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); //Sets up theme
@@ -29,6 +29,8 @@ function App() {
         <CssBaseline />
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage formType="email" />} />
+          <Route path="/forgot-password/:jwt" element={<ForgotPasswordPage formType="password" />} />
           <Route path="/home" element={ isAuth ? <HomePage /> : <Navigate to="/"/>} /> {/* If user is not logged in, redirect to login page */}
           <Route path="/profile/:userId" element={ isAuth ? <ProfilePage /> : <Navigate to="/"/>} /> {/* Home and Profile are protected */}
           <Route path="/create-ad" element={isAuth ? <AdPage /> : <Navigate to="/"/>}/>

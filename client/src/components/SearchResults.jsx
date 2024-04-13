@@ -25,7 +25,7 @@ import FriendListWidget from "../scenes/widgets/FriendListWidget";
 import SortingOptions from "./SortOptions";
 import PageExploreWidget from "../scenes/widgets/PageExploreWidget";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const SearchResults = () => {
     const { palette } = useTheme();
@@ -53,7 +53,7 @@ const SearchResults = () => {
     // Fetching user details (displayTag is required for sorting posts based on relevance)
     useEffect(()=> {
         async function fetchUser() {
-            const response = await fetch(`http://localhost:${serverPort}/user/${authenticatedUser._id}`, { //API call
+            const response = await fetch(`${serverURL}/user/${authenticatedUser._id}`, { //API call
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` }
             });

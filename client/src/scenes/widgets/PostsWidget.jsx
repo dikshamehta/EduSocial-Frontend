@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PostsWidget = ({ userId, isProfile = false }) => {
     const dispatch = useDispatch(); //So we can use Redux
@@ -24,7 +24,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     //2 API calls
     //1. Grabs all the posts - getFeedPosts
     const getPosts = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/posts`, {
+        const response = await fetch(`${serverURL}/posts`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -35,7 +35,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
     //2. Grabs all the posts from a specific user - getUserPosts
     const getUserPosts = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/posts/${userId}`, {
+        const response = await fetch(`${serverURL}/posts/${userId}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -44,7 +44,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     };
 
     const getUser = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, { //API call
+        const response = await fetch(`${serverURL}/user/${userId}`, { //API call
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 //This is the left hand side of the home page that displays the user's information
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const UserWidget = ({ userId, picturePath }) => {
     const [ user, setUser ] = useState(null); //Grabs user from the backend
@@ -27,7 +27,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
     //We want to grab user information, so we call API
     const getUser = async () => {
-        const response = await fetch(`http://localhost:${serverPort}/user/${userId}`, { //API call
+        const response = await fetch(`${serverURL}/user/${userId}`, { //API call
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         });

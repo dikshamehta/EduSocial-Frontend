@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PagePostWidget from "./PagePostWidget";
 import { useState } from "react";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 const PagePostContainerWidget = ({ pageId }) => {
     const [posts, setPosts] = useState([]);
     const token = useSelector((state) => state.token);
@@ -12,7 +12,7 @@ const PagePostContainerWidget = ({ pageId }) => {
 
     const getPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:${serverPort}/pagePost/${pageId}`, {
+            const response = await fetch(`${serverURL}/pagePost/${pageId}`, {
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             });
