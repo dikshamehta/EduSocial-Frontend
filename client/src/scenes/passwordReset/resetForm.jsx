@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const PasswordForm = ({ jsonToken }) => {
     const [password, setPassword] = useState("");
@@ -32,7 +32,7 @@ const PasswordForm = ({ jsonToken }) => {
 
     const resetPassword = async () => {
         try {
-            const res = await fetch(`http://localhost:${serverPort}/user/resetPassword`, {
+            const res = await fetch(`${serverURL}/user/resetPassword`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

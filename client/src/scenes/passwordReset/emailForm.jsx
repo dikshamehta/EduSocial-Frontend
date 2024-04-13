@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
 const EmailForm = () => {
     const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ const EmailForm = () => {
 
     const verifyEmail = async () => {
         try {
-            const res = await fetch(`http://localhost:${serverPort}/user/email/${email}`, {
+            const res = await fetch(`${serverURL}/user/email/${email}`, {
                 method: "GET",
             });
 
