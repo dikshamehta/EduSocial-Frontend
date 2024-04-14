@@ -13,6 +13,7 @@ import SettingsPage from 'scenes/settingsPage';
 import SinglePostPage from 'scenes/singlePostPage';
 import SearchPage from "./scenes/SearchPage";
 import PageExplorePage from "./scenes/pageExplorePage";
+import Messenger from "./components/Messenger.jsx"
 import PageCreationPage from "./scenes/pageCreationPage";
 import PagePage from "./scenes/pagePage";
 import PageSettingsPage from "./scenes/pageSettingsPage";
@@ -25,24 +26,64 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage formType="email" />} />
-          <Route path="/forgot-password/:jwt" element={<ForgotPasswordPage formType="password" />} />
-          <Route path="/home" element={ isAuth ? <HomePage /> : <Navigate to="/"/>} /> {/* If user is not logged in, redirect to login page */}
-          <Route path="/profile/:userId" element={ isAuth ? <ProfilePage /> : <Navigate to="/"/>} /> {/* Home and Profile are protected */}
-          <Route path="/create-ad" element={isAuth ? <AdPage /> : <Navigate to="/"/>}/>
-          <Route path="/settings" element={isAuth ? <SettingsPage /> : <Navigate to="/"/>}/>
-          <Route path="/post/:userId/:postId" element={isAuth ? <SinglePostPage/> : <Navigate to="/"/>}/>
-          <Route path="/search" element={<SearchPage />} /> {/* Home and Profile are protected */}
-          <Route path="/page" element={ isAuth ? <PageExplorePage /> : <Navigate to="/"/>} />
-          <Route path="/page/create" element={ isAuth ? <PageCreationPage /> : <Navigate to="/"/>} />
-          <Route path="/page/:pageId" element={ isAuth ? <PagePage /> : <Navigate to="/"/>} />
-          <Route path="page/:pageId/settings" element={ isAuth ? <PageSettingsPage /> : <Navigate to="/"/>} />
-        </Routes>
-      </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPasswordPage formType="email" />}
+            />
+            <Route
+              path="/forgot-password/:jwt"
+              element={<ForgotPasswordPage formType="password" />}
+            />
+            <Route
+              path="/home"
+              element={isAuth ? <HomePage /> : <Navigate to="/" />}
+            />{" "}
+            {/* If user is not logged in, redirect to login page */}
+            <Route
+              path="/profile/:userId"
+              element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+            />{" "}
+            {/* Home and Profile are protected */}
+            <Route
+              path="/create-ad"
+              element={isAuth ? <AdPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/settings"
+              element={isAuth ? <SettingsPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/post/:userId/:postId"
+              element={isAuth ? <SinglePostPage /> : <Navigate to="/" />}
+            />
+            <Route path="/search" element={<SearchPage />} />{" "}
+            {/* Home and Profile are protected */}
+            <Route
+              path="/page"
+              element={isAuth ? <PageExplorePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/page/create"
+              element={isAuth ? <PageCreationPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/page/:pageId"
+              element={isAuth ? <PagePage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="page/:pageId/settings"
+              element={isAuth ? <PageSettingsPage /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/messenger"
+              element={isAuth ? <Messenger /> : <Navigate to="/" />}
+            />
+          </Routes>
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );
