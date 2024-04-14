@@ -29,7 +29,9 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
-    updatePost = setPost
+    updatePost = setPost,
+    width = "650px",
+    m = "2rem 0"
 }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
