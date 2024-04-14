@@ -65,7 +65,7 @@ const SearchResults = () => {
 
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
     const postSortOptions = ["Latest", "Oldest", "Relevance"];
-    const pageSortOptions = ["Latest", "Oldest", "Relevance"];
+    const pageSortOptions = ["Latest", "Oldest"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
     const [postSortValue, setPostSortValue] = useState(postSortOptions[0]);
     const [pageSortValue, setPageSortValue] = useState(pageSortOptions[0]);

@@ -92,7 +92,7 @@ const PostWidget = ({
     const types = ["Cash", "Credit Card", "Bitcoin"];
   
     return (
-      <WidgetWrapper m="2rem 0" width="650px">
+      <WidgetWrapper m={m} width={width}>
         <Friend
           friendId={postUserId}
           name={name}
