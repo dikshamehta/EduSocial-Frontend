@@ -4,6 +4,8 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import {useDispatch, useSelector} from "react-redux";
 import {setFilterResults} from "../state";
+import FlexBetween from "./FlexBetween";
+import WidgetWrapper from "./WidgetWrapper";
 
 // TODO: remove middle variable filter result
 
@@ -23,21 +25,26 @@ function SearchFilter() {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}>
-            <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
-                onChange={handleChange}
-                aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: 'divider' }}
-            >
-                <Tab label="All" />
-                <Tab label="Posts" />
-                <Tab label="People" />
-                <Tab label="Pages" />
-            </Tabs>
-        </Box>
+        <WidgetWrapper>
+        <FlexBetween>
+            {/*<Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}>*/}
+                <Tabs
+                    orientation="vertical"
+                    variant="scrollable"
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="Vertical tabs example"
+                    sx={{ borderRight: 1, borderColor: 'divider', justifyContent: 'flex-end'}}
+                >
+                    <Tab label="All" />
+                    <Tab label="Posts" />
+                    <Tab label="People" />
+                    <Tab label="Pages" />
+                </Tabs>
+        </FlexBetween>
+        </WidgetWrapper>
+
+        // </Box>
     );
 }
 

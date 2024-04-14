@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material";
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 
-const PageExploreWidget = ({ page }) => {
+const PageExploreWidget = ({ page, alignItems = "center", gridWidth = "171.03px" }) => {
   const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -48,9 +48,9 @@ const PageExploreWidget = ({ page }) => {
       <Grid
         container
         direction="column"
-        alignItems="center"
+        alignItems={alignItems}
         spacing={2}
-        width="171.03px"
+        width={gridWidth}
         onClick={() => navigateToPage()}
         sx={{ cursor: "pointer" }}
       >
@@ -74,7 +74,7 @@ const PageExploreWidget = ({ page }) => {
         <PageImage image={page.pagePicturePath} />
         <Tooltip title={page.pageName}>
           <Typography
-            align="center"
+            align={alignItems}
             width="100%"
             variant="h4"
             color={dark}
@@ -92,7 +92,7 @@ const PageExploreWidget = ({ page }) => {
           {page.pageType.charAt(0).toUpperCase() + page.pageType.slice(1)}
         </Typography>
       </Grid>
-      <Box textAlign="center">
+      <Box textAlign={alignItems}>
         {page.pageMembers.includes(_id) ? (
           <Button
             variant="outlined"
