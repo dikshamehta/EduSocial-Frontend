@@ -65,7 +65,7 @@ const SearchResults = () => {
 
     const peopleSortOptions = ["Name Ascending", "Name Descending", "Relevance"];
     const postSortOptions = ["Latest", "Oldest", "Relevance"];
-    const pageSortOptions = ["Latest", "Oldest", "Relevance"];
+    const pageSortOptions = ["Latest", "Oldest"];
     const [peopleSortValue, setPeopleSortValue] = useState(peopleSortOptions[2]);
     const [postSortValue, setPostSortValue] = useState(postSortOptions[0]);
     const [pageSortValue, setPageSortValue] = useState(pageSortOptions[0]);
@@ -178,6 +178,8 @@ const SearchResults = () => {
             likes={likes}
             comments={comments}
             updatePost={setSearchPost}
+            width = "1100px"
+            m = "0.5rem 0"
         />
     )
 
@@ -186,16 +188,15 @@ const SearchResults = () => {
     )
 
     let pages_mapping = page => (
-        <PageExploreWidget page={page}/>
+            <PageExploreWidget page={page}  alignItems = "left" gridWidth = "1100px"/>
     )
 
-    let people_results = <Box>
-        <WidgetWrapper  display={"flex"} flexDirection={"row"}
-        >
+    let no_results = (
+        <Box>
+        <WidgetWrapper>
             <Typography
-                variant="h4"
+                variant="h7"
                 color={dark}
-                fontWeight="500"
                 sx={{
                     "&:hover": {
                         color: main,
@@ -203,44 +204,95 @@ const SearchResults = () => {
                     },
                 }}
             >
-                People
+                No Results Found
             </Typography>
-            <SortingOptions 
-                sortValue = {peopleSortValue} 
-                sortOptions={peopleSortOptions} 
-                onSortChange={handlePeopleSortChange}/>
         </WidgetWrapper>
-        <Divider/>
-
-        {searchResults.people.map(people_mapping)};
     </Box>
+    );
 
-    let posts_results = <Box>
-        <WidgetWrapper>
-            <Typography
-                variant="h4"
-                color={dark}
-                fontWeight="500"
-                sx={{
-                    "&:hover": {
-                        color: main,
-                        cursor: "pointer",
-                    },
-                }}
+    let people_results = (
+        <Box marginBottom={4}>
+            <WidgetWrapper
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                marginBottom={1}
             >
-                Posts
-            </Typography>
-            <SortingOptions 
-                sortValue = {postSortValue} 
-                sortOptions={postSortOptions} 
-                onSortChange={handlePostSortChange}/>
-        </WidgetWrapper>
-        <Divider/>
-        {searchResults.posts.map(posts_mapping)}
+
+                        <Typography
+                            variant="h4"
+                            color={dark}
+                            fontWeight="500"
+                            sx={{
+                                "&:hover": {
+                                    color: main,
+                                    cursor: "pointer",
+                                },
+                            }}
+                        >
+                            People
+                        </Typography>
+                        <SortingOptions
+                            sortValue={peopleSortValue}
+                            sortOptions={peopleSortOptions}
+                            onSortChange={handlePeopleSortChange}
+                        />
+
+            </WidgetWrapper>
+
+
+
+            {searchResults.people && searchResults.people.length > 0 ? (
+            <>
+            <WidgetWrapper>
+                {searchResults.people.map(people_mapping)}
+            </WidgetWrapper>
+            </>
+            ) : (
+                no_results
+            )
+
+            }
+        </Box>
+    );
+
+    let posts_results =
+        <Box marginBottom={4}>
+            <WidgetWrapper display={"flex"} flexDirection={"row"} justifyContent={"space-between"} marginBottom={1}>
+                <Typography
+                    variant="h4"
+                    color={dark}
+                    fontWeight="500"
+                    sx={{
+                        "&:hover": {
+                            color: main,
+                            cursor: "pointer",
+                        },
+                    }}
+                >
+                    Posts
+                </Typography>
+                <SortingOptions
+                    sortValue = {postSortValue}
+                    sortOptions={postSortOptions}
+                    onSortChange={handlePostSortChange}/>
+            </WidgetWrapper>
+
+            <Box>
+                {searchResults.posts && searchResults.posts.length > 0 ? (
+                    <>
+                        {searchResults.posts.map(posts_mapping)}
+                    </>
+                ) : (
+                    no_results
+                )
+
+                }
+            </Box>
     </Box>
 
-    let pages_results = <Box>
-        <WidgetWrapper>
+    let pages_results = <Box marginBottom={4}>
+        <WidgetWrapper display={"flex"} flexDirection={"row"} justifyContent={"space-between"} marginBottom={1}>
             <Typography
                 variant="h4"
                 color={dark}
@@ -259,8 +311,14 @@ const SearchResults = () => {
                 sortOptions={pageSortOptions}
                 onSortChange={handlePageSortChange}/>
         </WidgetWrapper>
-        <Divider/>
-        {searchResults.pages.map(pages_mapping)}
+        {searchResults.pages && searchResults.pages.length > 0 ? (
+            <>
+                {searchResults.pages.map(pages_mapping)}
+            </>
+        ) : (
+            no_results
+        )
+        }
     </Box>
 
 
