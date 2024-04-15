@@ -11,10 +11,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
     "axios": "^1.6.8",
-=======
->>>>>>> a9ee23f53d5e58c883dabd69d4c8d2a7fd28297a
     "dotenv": "^16.4.4",
     "firebase": "^10.9.0",
     "formik": "^2.4.5",
