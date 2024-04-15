@@ -178,7 +178,7 @@ const SearchResults = () => {
             likes={likes}
             comments={comments}
             updatePost={setSearchPost}
-            width = "1100px"
+            width = "1500px"
             m = "0.5rem 0"
         />
     )
